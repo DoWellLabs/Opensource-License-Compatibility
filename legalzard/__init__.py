@@ -1,0 +1,1 @@
+from legalzard.legalzard import Legalzard
