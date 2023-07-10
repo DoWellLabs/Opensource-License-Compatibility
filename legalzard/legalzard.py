@@ -5,6 +5,11 @@ import requests
 
 
 class Legalzard:
+    def _response(self, request):
+        if request.status_code == 200:
+            return request.json()
+        return json.dumps({'Error': '{} {}'.format(request.status_code, request.content.decode('utf-8'))})
+
     def get_all(self):
         """
         Get all licenses submitted
@@ -16,7 +21,7 @@ class Legalzard:
         :param data: A list of licenses.
 
         """
-        return requests.get(url=LEGALZARD_API).json()
+        return self._response(requests.get(url=LEGALZARD_API))
 
     def create(self, license: dict):
         """
@@ -28,7 +33,7 @@ class Legalzard:
         :param: isSuccess: A boolean showing retrieval status
         :param data: A list with a single license.
         """
-        return requests.post(url=LEGALZARD_API, data=json.dumps(license)).json()
+        return self._response(requests.post(url=LEGALZARD_API, data=json.dumps(license)))
 
     def retrieve(self, event_id: str):
         """
@@ -40,7 +45,7 @@ class Legalzard:
         :param: isSuccess: A boolean showing retrieval status
         :param data: A list with a single license.
         """
-        return requests.get(url='{}{}/'.format(LEGALZARD_API, event_id)).json()
+        return self._response(requests.get(url='{}{}/'.format(LEGALZARD_API, event_id)))
 
     def update(self, event_id: str, license: dict):
         """
@@ -54,7 +59,7 @@ class Legalzard:
         :param: isSuccess: A boolean showing retrieval status
         :param data: A list with a single license.
         """
-        return requests.put(url='{}{}/'.format(LEGALZARD_API, event_id), data=json.dumps(license)).json()
+        return self._response(requests.put(url='{}{}/'.format(LEGALZARD_API, event_id), data=json.dumps(license)))
 
     def delete(self, event_id: str):
         """
@@ -65,7 +70,7 @@ class Legalzard:
         :param: event_id: The license that was deleted
         :param isSuccess: Status of the action
         """
-        return requests.delete(url='{}{}/'.format(LEGALZARD_API, event_id)).json()
+        return self._response(requests.delete(url='{}{}/'.format(LEGALZARD_API, event_id)))
 
     def search(self, search_term: str):
         """
@@ -77,7 +82,8 @@ class Legalzard:
         :param: isSuccess: A boolean showing retrieval status
         :param data: A list with matching licenses.
         """
-        return requests.get(url=LEGALZARD_API, params={'action_type': 'search', 'search_term': search_term}).json()
+        return self._response(
+            requests.get(url=LEGALZARD_API, params={'action_type': 'search', 'search_term': search_term}))
 
     def check_compatibility(self, comparison_data: dict):
         """
@@ -104,7 +110,7 @@ class Legalzard:
 
         """
         comparison_data['action_type'] = 'check-compatibility'
-        return requests.post(url=LEGALZARD_API, data=json.dumps(comparison_data)).json()
+        return self._response(requests.post(url=LEGALZARD_API, data=json.dumps(comparison_data)))
 
     def get_compatibility_history(self, organization_id: str, user_id: str):
         """
@@ -118,5 +124,6 @@ class Legalzard:
         :param isSuccess: Request status
         :param data: a list of License comparison history objects
         """
-        return requests.get(url=LEGALZARD_API, params={'collection_type': 'license-compatibility-history',
-                                                       'organization_id': organization_id, 'user_id': user_id})
+        return self._response(
+            requests.get(url=LEGALZARD_API, params={'collection_type': 'license-compatibility-history',
+                                                    'organization_id': organization_id, 'user_id': user_id}))
