@@ -21,5 +21,5 @@ setup(
     long_description=long_description,
     packages=find_packages(),
     install_requires=['requests'],
-    keywords=['python', 'License', 'Open-Source', 'Compatibility'],
+    keywords=['python', 'License', 'Open Source', 'Compatibility'],
 )
