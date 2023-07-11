@@ -18,6 +18,7 @@ This package consumes the Open Source License Compatibility check API, which pro
 Create a new licence
 
 - `data`: The json data with format as shown:
+  
             ```json
             {
             "license_name": "Test & Sample Update",
