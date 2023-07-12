@@ -1,3 +1,13 @@
+Metadata-Version: 2.1
+Name: dowell-legalzard
+Version: 0.1.0
+Summary: Dowell Opensource License Compatibility Libray
+Home-page: UNKNOWN
+Author: Dennis RK.
+License: MIT
+Platform: UNKNOWN
+Description-Content-Type: text/markdown
+
 # Dowell Opensource License Compatibility Library
 
 Powered by [Legalzard API](https://documenter.getpostman.com/view/22392526/2s93mBvyQx)
@@ -1505,3 +1515,4 @@ This library offers all the features through the Legalzard API
      ]
    }
    ```
+

@@ -1,0 +1,9 @@
+README.md
+setup.py
+dowell_legalzard.egg-info/PKG-INFO
+dowell_legalzard.egg-info/SOURCES.txt
+dowell_legalzard.egg-info/dependency_links.txt
+dowell_legalzard.egg-info/requires.txt
+dowell_legalzard.egg-info/top_level.txt
+legalzard/__init__.py
+legalzard/legalzard.py
