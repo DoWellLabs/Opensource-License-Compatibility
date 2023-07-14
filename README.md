@@ -188,8 +188,8 @@ Checks how compatible two licences are
 
 - `license_event_id_one`: The id of the first licence's event_id
 - `license_event_id_two`: The id of the second licence's event_id
-- `user_id`: The user's ID
-- `organization_id`: the organization's ID
+- `user_id` (Optional): The user's ID
+- `organization_id` (Optional): the organization's ID
 - Returns: Response returns a json that contains percentage_of_compatibility, along with other related comparison information of the two licences
 
 #### `comparison_history(organization_id, user_id)`
