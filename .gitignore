@@ -128,7 +128,7 @@ pyvenv.cfg
 .venv
 pip-selfcheck.json
 
-# End of https://www.toptal.com/developers/gitignore/api/pycharm,venv
+
 
 _*
 
@@ -137,3 +137,5 @@ dist/
 build/
 setup.py
 pypi.md
+
+# End of https://www.toptal.com/developers/gitignore/api/pycharm,venv
