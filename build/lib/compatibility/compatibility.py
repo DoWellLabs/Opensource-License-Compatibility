@@ -35,8 +35,8 @@ class Compatibility:
         
         '''
         # Make a POST request to the API.
-        response = requests.post(self.base_url, json=data, timeout=10)
-        if response.status_code == 201:
+        response = requests.post(self.base_url, json=data)
+        if response.status_code == 200:
             return response.json()
         return {"Error code: " : response.status_code}
 
@@ -49,7 +49,7 @@ class Compatibility:
         retrieves the Licence with teh specified ID
 
         """
-        response = requests.get(f"{self.base_url}/{licence_id}", timeout=10)
+        response = requests.get(f"{self.base_url}/{licence_id}")
         if response.status_code == 200:
             return response.json()
         return {"Error code: ", response.status_code}
@@ -63,7 +63,7 @@ class Compatibility:
         retrieves the Licence with teh specified ID
 
         """
-        response = requests.get(self.base_url, timeout=10)
+        response = requests.get(self.base_url)
         if response.status_code == 200:
             return response.json()
         return {"Error code: ", response.status_code}
@@ -76,7 +76,7 @@ class Compatibility:
         :param data: The json data with format as shown in `json_sample.json`
         :return: Response returns a json of the updated licence.
         """
-        response = requests.put(f"{self.base_url}/{licence_id}", json=data, timeout=10)
+        response = requests.put(f"{self.base_url}/{licence_id}", json=data)
         if response.status_code == 200:
             return response.json()
         return {"Error code: " : response.status_code}
@@ -91,7 +91,7 @@ class Compatibility:
         success if deleted.
         
         """
-        response = requests.delete(f"{self.base_url}/{licence_id}", timeout=10)
+        response = requests.delete(f"{self.base_url}/{licence_id}")
         if response.status_code == 200:
             return response.json()
         return {"Error code: " : response.status_code}
@@ -106,12 +106,12 @@ class Compatibility:
          searched
 
         """
-        response = requests.get(f"{self.base_url}/?search_term={term}&action_type=search", timeout=10)
+        response = requests.get(f"{self.base_url}/?search_term={term}&action_type=search")
         if response.status_code == 200:
             return response.json()
         return {"Error code: " : response.status_code}
 
-    def check_licence_compatibility(self, event_id_one,event_id_two, user_id, organization_id):
+    def check_licence_compatibility(self, event_id_one,event_id_two, user_id=None, organization_id=None):
         '''
         Checks how compatible two licences are
         
@@ -128,11 +128,11 @@ class Compatibility:
             "action_type": "check-compatibility",
             "license_event_id_one": event_id_one,
             "license_event_id_two": event_id_two,
-            "user_id": int(user_id),
-            "organization_id": organization_id
+            "user_id": None if user_id == None else int(user_id),
+            "organization_id": None if organization_id == None else organization_id
         }
-        response = requests.post(self.base_url, json=data, timeout=10)
-        if response.status_code == 201:
+        response = requests.post(self.base_url, json=data)
+        if response.status_code == 200:
             return response.json()
         return {"Error code: " : response.status_code}
 
@@ -147,7 +147,7 @@ class Compatibility:
         
         '''
         url = f"{self.base_url}/?collection_type=license-compatibility-history"
-        response = requests.get(f"{url}&organization_id={organization_id}&user_id={user_id}", timeout=10)
+        response = requests.get(f"{url}&organization_id={organization_id}&user_id={user_id}")
         if response.status_code == 200:
             return response.json()
         return {"Error code: " : response.status_code}

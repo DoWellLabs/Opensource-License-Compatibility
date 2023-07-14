@@ -31,7 +31,8 @@ This package consumes the Open Source License Compatibility check API, which pro
 Create a new licence
 
 - `data`: The json data with format as shown:
-            ```json
+  
+    ```json            
             {
             "license_name": "Test & Sample Update",
             "license_tags": [],
@@ -210,5 +211,6 @@ Retrieves the comparison history
 
 - `organization_id`: the organization's ID
 - `user_id`: The user's ID
-- Returns: Response returns a json that contains a history of the comparisons done by the organization and the user
+- Returns: Response returns a json that contains a history of the comparisons done by the organization and the user
+
 

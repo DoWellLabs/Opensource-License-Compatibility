@@ -19,8 +19,7 @@ Create a new licence
 
 - `data`: The json data with format as shown:
   
-            ```json
-            
+    ```json            
             {
             "license_name": "Test & Sample Update",
             "license_tags": [],
