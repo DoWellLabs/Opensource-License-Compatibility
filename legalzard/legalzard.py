@@ -6,7 +6,7 @@ import requests
 
 class Legalzard:
     def _response(self, request):
-        if request.status_code == 200:
+        if request.status_code in [200, 201]:
             return request.json()
         return json.dumps({'Error': '{} {}'.format(request.status_code, request.content.decode('utf-8'))})
 
