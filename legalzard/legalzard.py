@@ -1,10 +1,16 @@
 import json
 
-LEGALZARD_API = 'https://100080.pythonanywhere.com/api/licenses/'
+LEGALZARD_API = 'https://100080.pythonanywhere.com/api/public/licenses/'
 import requests
+from requests.structures import CaseInsensitiveDict
 
 
 class Legalzard:
+    headers = CaseInsensitiveDict()
+
+    def __init__(self, api_key):
+        self.headers['api_key'] = api_key
+
     def _response(self, request):
         if request.status_code in [200, 201]:
             return request.json()
@@ -21,7 +27,7 @@ class Legalzard:
         :param data: A list of licenses.
 
         """
-        return self._response(requests.get(url=LEGALZARD_API))
+        return self._response(requests.get(url=LEGALZARD_API, headers=self.headers))
 
     def create(self, license: dict):
         """
@@ -33,7 +39,7 @@ class Legalzard:
         :param: isSuccess: A boolean showing retrieval status
         :param data: A list with a single license.
         """
-        return self._response(requests.post(url=LEGALZARD_API, data=json.dumps(license)))
+        return self._response(requests.post(url=LEGALZARD_API, json=json.dumps(license), headers=self.headers))
 
     def retrieve(self, event_id: str):
         """
@@ -45,7 +51,7 @@ class Legalzard:
         :param: isSuccess: A boolean showing retrieval status
         :param data: A list with a single license.
         """
-        return self._response(requests.get(url='{}{}/'.format(LEGALZARD_API, event_id)))
+        return self._response(requests.get(url='{}{}/'.format(LEGALZARD_API, event_id), headers=self.headers))
 
     def update(self, event_id: str, license: dict):
         """
@@ -59,7 +65,8 @@ class Legalzard:
         :param: isSuccess: A boolean showing retrieval status
         :param data: A list with a single license.
         """
-        return self._response(requests.put(url='{}{}/'.format(LEGALZARD_API, event_id), data=json.dumps(license)))
+        return self._response(
+            requests.put(url='{}{}/'.format(LEGALZARD_API, event_id), json=json.dumps(license), headers=self.headers))
 
     def delete(self, event_id: str):
         """
@@ -70,7 +77,7 @@ class Legalzard:
         :param: event_id: The license that was deleted
         :param isSuccess: Status of the action
         """
-        return self._response(requests.delete(url='{}{}/'.format(LEGALZARD_API, event_id)))
+        return self._response(requests.delete(url='{}{}/'.format(LEGALZARD_API, event_id), headers=self.headers))
 
     def search(self, search_term: str):
         """
@@ -83,7 +90,8 @@ class Legalzard:
         :param data: A list with matching licenses.
         """
         return self._response(
-            requests.get(url=LEGALZARD_API, params={'action_type': 'search', 'search_term': search_term}))
+            requests.get(url=LEGALZARD_API, params={'action_type': 'search', 'search_term': search_term},
+                         headers=self.headers))
 
     def check_compatibility(self, comparison_data: dict):
         """
@@ -110,9 +118,9 @@ class Legalzard:
 
         """
         comparison_data['action_type'] = 'check-compatibility'
-        return self._response(requests.post(url=LEGALZARD_API, data=json.dumps(comparison_data)))
+        return self._response(requests.post(url=LEGALZARD_API, json=json.dumps(comparison_data), headers=self.headers))
 
-    def get_compatibility_history(self, organization_id: str, user_id: str):
+    def get_compatibility_history(self, organization_id: str = None, user_id: str = None):
         """
         Get Compatibility Check History by a user.
         :param organization_id: Your Organization Id
@@ -126,4 +134,5 @@ class Legalzard:
         """
         return self._response(
             requests.get(url=LEGALZARD_API, params={'collection_type': 'license-compatibility-history',
-                                                    'organization_id': organization_id, 'user_id': user_id}))
+                                                    'organization_id': organization_id, 'user_id': user_id},
+                         headers=self.headers))

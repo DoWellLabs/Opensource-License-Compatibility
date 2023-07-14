@@ -8,6 +8,10 @@ aims to facilitate the integration of legal information into applications, websi
 
 ## Installation and Usage
 
+Download or clone the project
+from [github](https://github.com/DoWellLabs/Opensource-License-Compatibility/tree/legalzard-Dennis) to the root of your
+project.
+
 Import the package
 
 ```python
