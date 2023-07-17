@@ -9,7 +9,7 @@ class Legalzard:
     headers = CaseInsensitiveDict()
 
     def __init__(self, api_key):
-        self.headers['api_key'] = api_key
+        self.headers['API-KEY'] = api_key
 
     def _response(self, request):
         if request.status_code in [200, 201]:
