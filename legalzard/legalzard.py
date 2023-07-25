@@ -26,8 +26,8 @@ class Legalzard:
                     "license_event_id_one": license.get("event_id"),
                     "license_event_id_two": ext_license.get("event_id")
                 })
-
-            return self.get_compatibility_history()
+            # return result
+            return result
 
         return json.dumps({'Error': '{} {}'.format(request.status_code, request.content.decode('utf-8'))})
 
