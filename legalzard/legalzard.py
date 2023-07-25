@@ -11,9 +11,24 @@ class Legalzard:
     def __init__(self, api_key):
         self.headers['API-KEY'] = api_key
 
-    def _response(self, request):
+    def _response(self, request, check_compatibility=False):
         if request.status_code in [200, 201]:
-            return request.json()
+            result = request.json()
+            if not check_compatibility:
+                return result
+            # Run compatibility with all other licenses
+            all_licenses = json.loads(self.get_all())
+            license = json.loads(result).get("data")
+
+            for data in all_licenses:
+                ext_license = data.get("data")
+                self.check_compatibility({
+                    "license_event_id_one": license.get("event_id"),
+                    "license_event_id_two": ext_license.get("event_id")
+                })
+
+            return self.get_compatibility_history()
+
         return json.dumps({'Error': '{} {}'.format(request.status_code, request.content.decode('utf-8'))})
 
     def get_all(self):
@@ -29,7 +44,7 @@ class Legalzard:
         """
         return self._response(requests.get(url=LEGALZARD_API, headers=self.headers))
 
-    def create(self, license: dict):
+    def create(self, license: dict, check_compatibility=False):
         """
         Create a license by adding all the fields required
         :param license: An object with the following license parameters as listed in the main documentation.
@@ -53,7 +68,7 @@ class Legalzard:
         """
         return self._response(requests.get(url='{}{}/'.format(LEGALZARD_API, event_id), headers=self.headers))
 
-    def update(self, event_id: str, license: dict):
+    def update(self, event_id: str, license: dict, check_compatibility=False):
         """
         This method updates the license information stored on the database
         :param event_id: This is the eventId parameter from the license information already stored
@@ -133,6 +148,7 @@ class Legalzard:
         :param data: a list of License comparison history objects
         """
         return self._response(
-            requests.get(url=LEGALZARD_API, params={'collection_type': 'license-compatibility-history',
-                                                    'organization_id': organization_id, 'user_id': user_id},
+            requests.get(url=LEGALZARD_API,
+                         params={'collection_type': 'license-compatibility-history',
+                                 'organization_id': organization_id, 'user_id': user_id},
                          headers=self.headers))
