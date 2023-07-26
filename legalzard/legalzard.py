@@ -54,7 +54,8 @@ class Legalzard:
         :param: isSuccess: A boolean showing retrieval status
         :param data: A list with a single license.
         """
-        return self._response(requests.post(url=LEGALZARD_API, json=json.dumps(license), headers=self.headers))
+        return self._response(requests.post(url=LEGALZARD_API, json=json.dumps(license), headers=self.headers),
+                              check_compatibility)
 
     def retrieve(self, event_id: str):
         """
@@ -81,7 +82,8 @@ class Legalzard:
         :param data: A list with a single license.
         """
         return self._response(
-            requests.put(url='{}{}/'.format(LEGALZARD_API, event_id), json=json.dumps(license), headers=self.headers))
+            requests.put(url='{}{}/'.format(LEGALZARD_API, event_id), json=json.dumps(license), headers=self.headers),
+            check_compatibility)
 
     def delete(self, event_id: str):
         """
