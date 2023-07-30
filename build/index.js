@@ -95,8 +95,7 @@ const Dashboard = () => {
       setLicense1(item.license_1);
       setLicense2(item.license_2);
     });
-
-    // console.log(response); 
+    console.log(response);
     // action_type: "check-compatibility",
     // organization_id: "63cf89a0dcc2a171957b290b",
     // user_id: 609,
