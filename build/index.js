@@ -74,15 +74,6 @@ const Dashboard = () => {
       [e.target.name]: e.target.value
     }));
   };
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
-    _data__WEBPACK_IMPORTED_MODULE_2__.sample_data.forEach(item => {
-      item.percentage_of_compatibility <= 50 ? setCompatibiltyResult("Not Recommended") : item.percentage_of_compatibility <= 70 ? setCompatibiltyResult("Recommended") : setCompatibiltyResult("Highly Recommended");
-      setLicense1(item.license_1);
-      setLicense2(item.license_2);
-    });
-    console.log(license1);
-    console.log(compatibiltyResult);
-  }, [license1]);
   const checkLicenseCompatibilty = async e => {
     e.preventDefault();
     const response = await fetch("https://100080.pythonanywhere.com/api/public/licenses/", {
@@ -95,7 +86,7 @@ const Dashboard = () => {
         license_event_id_two: inputState.license_event_id_two
       }),
       headers: {
-        "API-KEY": "5ce6900f-e5e3-463f-b537-8cdbdf9423c9",
+        "API-KEY": "",
         "Content-Type": "application/json"
       }
     });
@@ -105,7 +96,7 @@ const Dashboard = () => {
       setLicense2(item.license_2);
     });
 
-    // console.log(response);
+    // console.log(response); 
     // action_type: "check-compatibility",
     // organization_id: "63cf89a0dcc2a171957b290b",
     // user_id: 609,
@@ -120,7 +111,7 @@ const Dashboard = () => {
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "col-md-5"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "license-content card "
+    className: "license-content card"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "terms-text card-body"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
