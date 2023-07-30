@@ -1,0 +1,31 @@
+{
+  "name": "dowell",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "wp-scripts build",
+    "start": "wp-scripts start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Victor Yohanna",
+  "license": "ISC",
+  "devDependencies": {
+    "@wordpress/scripts": "^26.8.0",
+    "react-error-overlay": "^6.0.9"
+  },
+  "dependencies": {
+    "axios": "^1.4.0",
+    "bootstrap": "^5.3.0",
+    "crypto-browserify": "^3.12.0",
+    "dotenv": "^16.3.1",
+    "os-browserify": "^0.3.0",
+    "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
+    "sass": "^1.63.6",
+    "stream-browserify": "^3.0.0"
+  },
+  "resolutions": {
+    "react-error-overlay": "6.0.9"
+  }
+}
