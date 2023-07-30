@@ -52,7 +52,7 @@ const Dashboard = () => {
       setLicense2(item.license_2);
     });
 
-    console.log(response);
+    // console.log(response); 
     // action_type: "check-compatibility",
     // organization_id: "63cf89a0dcc2a171957b290b",
     // user_id: 609,
@@ -64,7 +64,7 @@ const Dashboard = () => {
     <div className="dashboard">
       <div className="row">
         <div className="col-md-5">
-          <div className="license-content card ">
+          <div className="license-content card">
             <div className="terms-text card-body">
               <form onSubmit={checkLicenseCompatibilty}>
                 <div className="row">
