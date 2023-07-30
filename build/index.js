@@ -85,33 +85,32 @@ const Dashboard = () => {
   }, [license1]);
   const checkLicenseCompatibilty = async e => {
     e.preventDefault();
-
-    // const response = await fetch(
-    //   "https://100080.pythonanywhere.com/api/public/licenses/",
-    //   {
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //       action_type: "check-compatibility",
-    //       organization_id: "63cf89a0dcc2a171957b290b",
-    //       user_id: 609,
-    //       license_event_id_one: "FB1010000000016839611235973491",
-    //       license_event_id_two: "FB1010000000016844191805602953",
-
-    //     }),
-    //     headers: {
-    //       "API-KEY": "5ce6900f-e5e3-463f-b537-8cdbdf9423c9",
-    //       "Content-Type": "application/json",
-    //     },
-    //   }
-    // );
+    const response = await fetch("https://100080.pythonanywhere.com/api/public/licenses/", {
+      method: "POST",
+      body: JSON.stringify({
+        action_type: inputState.action_type,
+        organization_id: inputState.organization_id,
+        user_id: inputState.user_id,
+        license_event_id_one: inputState.license_event_id_one,
+        license_event_id_two: inputState.license_event_id_two
+      }),
+      headers: {
+        "API-KEY": "5ce6900f-e5e3-463f-b537-8cdbdf9423c9",
+        "Content-Type": "application/json"
+      }
+    });
+    response.forEach(item => {
+      item.percentage_of_compatibility <= 50 ? setCompatibiltyResult("Not Recommended") : item.percentage_of_compatibility <= 70 ? setCompatibiltyResult("Recommended") : setCompatibiltyResult("Highly Recommended");
+      setLicense1(item.license_1);
+      setLicense2(item.license_2);
+    });
 
     // console.log(response);
-
-    //     action_type: inputState.action_type,
-    //     organization_id: inputState.organization_id,
-    //     user_id: inputState.user_id,
-    //     license_event_id_one: inputState.license_event_id_one,
-    //     license_event_id_two: inputState.license_event_id_two,
+    // action_type: "check-compatibility",
+    // organization_id: "63cf89a0dcc2a171957b290b",
+    // user_id: 609,
+    // license_event_id_one: "FB1010000000016839611235973491",
+    // license_event_id_two: "FB1010000000016844191805602953",
   };
 
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -148,7 +147,7 @@ const Dashboard = () => {
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     htmlFor: "organizationId",
     className: "form-label"
-  }, "Organization"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+  }, "Organization ID"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "text",
     className: "form-control form-control-sm",
     id: "organizationId",

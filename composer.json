@@ -1,6 +1,6 @@
 {
     "name": "test/dowell",
-    "description": "This is a test application on how to create WP plugin",
+    "description": "",
     "license": "GPL-2.0-or-later",
     "autoload": {
         "psr-4": {
