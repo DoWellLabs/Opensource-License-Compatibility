@@ -22,19 +22,19 @@ const Dashboard = () => {
   };
 
   
-useEffect(() => {
+// useEffect(() => {
   
-    sample_data.forEach((item) => {
-      item.percentage_of_compatibility <= 50
-        ? setCompatibiltyResult("Not Recommended")
-        : item.percentage_of_compatibility <= 70
-        ? setCompatibiltyResult("Recommended")
-        : setCompatibiltyResult("Highly Recommended");
-      setLicense1(item.license_1);
-      setLicense2(item.license_2)
-    });
+//     sample_data.forEach((item) => {
+//       item.percentage_of_compatibility <= 50
+//         ? setCompatibiltyResult("Not Recommended")
+//         : item.percentage_of_compatibility <= 70
+//         ? setCompatibiltyResult("Recommended")
+//         : setCompatibiltyResult("Highly Recommended");
+//       setLicense1(item.license_1);
+//       setLicense2(item.license_2)
+//     });
    
-  }, [license1]);
+//   }, [license1]);
   
   const checkLicenseCompatibilty = async (e) => {
     e.preventDefault();
