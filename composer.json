@@ -1,0 +1,17 @@
+{
+    "name": "test/dowell",
+    "description": "",
+    "license": "GPL-2.0-or-later",
+    "autoload": {
+        "psr-4": {
+            "Test\\Dowell\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Victor Yohanna",
+            "email": "victoryohanna@gmail.com"
+        }
+    ],
+    "require": {}
+}

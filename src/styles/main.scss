@@ -1,0 +1,53 @@
+@import "variables.scss";
+
+#dowell {
+  // border:1px solid black;
+  margin: 20px;
+  .app-title {
+    font-size: 28px;
+    font-weight: bold;
+    // margin-bottom: 1em;
+    text-align: center;
+  }
+
+  .app-services {
+    display: flex;
+    font-size: 16px;
+  }
+}
+
+.dashboard {
+  padding: 25px;
+  -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+      box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+  .row {
+    .col-md-5 {
+      .license-content {
+        padding: 1.5em;
+        .terms-text {
+          p {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+    .col-md-7 {
+      height: 380px;
+      overflow-y: scroll;
+      .license1 {
+        margin: 15px 0;
+        p {
+          font-size: 16px;
+        }
+      }
+      .license2 {
+        margin: 15px 0;
+        
+        p {
+          font-size: 16px;
+         
+        }
+      }
+    }
+  }
+}
