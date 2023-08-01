@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 import { sample_data } from "../data";
+import "../styles/main.scss"
 
 const Dashboard = () => {
   const [inputState, setInputState] = useState({
@@ -21,9 +23,23 @@ const Dashboard = () => {
     }));
   };
 
-  const checkLicenseCompatibilty = async (e) => {
+// useEffect(() => {
+  
+//     sample_data.forEach((item) => {
+//       item.percentage_of_compatibility <= 50
+//         ? setCompatibiltyResult("Not Recommended")
+//         : item.percentage_of_compatibility <= 70
+//         ? setCompatibiltyResult("Recommended")
+//         : setCompatibiltyResult("Highly Recommended");
+//       setLicense1(item.license_1);
+//       setLicense2(item.license_2)
+//     });
+   
+//   }, [license1]);
+  
+  const checkLicenseCompatibilty = async  (e) => {
     e.preventDefault();
-
+   
     const response = await fetch(
       "https://100080.pythonanywhere.com/api/public/licenses/",
       {
@@ -61,7 +77,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="dashboard">
+    <div className="dashboard" >
       <div className="row">
         <div className="col-md-5">
           <div className="license-content card">
@@ -157,7 +173,7 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="col-md-7 license-details">
-          <div className="compatibility-result">
+          <div className="compatibility-result" >
             <h4>Compatibility Result: {compatibiltyResult}</h4>
           </div>
           <div className="license1">

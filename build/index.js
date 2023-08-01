@@ -22,12 +22,6 @@ __webpack_require__.r(__webpack_exports__);
 
 // require('dotenv').config()  
 const App = () => {
-  // useEffect(() => {
-  //   window.process = {
-  //     ...window.process,
-  //   };
-
-  // }, []);
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "app"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h1", {
@@ -54,6 +48,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../data */ "./src/data.js");
+/* harmony import */ var _styles_main_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../styles/main.scss */ "./src/styles/main.scss");
+
+
 
 
 
@@ -74,6 +71,21 @@ const Dashboard = () => {
       [e.target.name]: e.target.value
     }));
   };
+
+  // useEffect(() => {
+
+  //     sample_data.forEach((item) => {
+  //       item.percentage_of_compatibility <= 50
+  //         ? setCompatibiltyResult("Not Recommended")
+  //         : item.percentage_of_compatibility <= 70
+  //         ? setCompatibiltyResult("Recommended")
+  //         : setCompatibiltyResult("Highly Recommended");
+  //       setLicense1(item.license_1);
+  //       setLicense2(item.license_2)
+  //     });
+
+  //   }, [license1]);
+
   const checkLicenseCompatibilty = async e => {
     e.preventDefault();
     const response = await fetch("https://100080.pythonanywhere.com/api/public/licenses/", {
@@ -596,7 +608,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 // Render the App component into the DOM
-(0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.render)((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_App__WEBPACK_IMPORTED_MODULE_1__["default"], null), document.getElementById('dowell'));
+(0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.render)((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_App__WEBPACK_IMPORTED_MODULE_1__["default"], null), document.getElementById('content-body'));
 })();
 
 /******/ })()
