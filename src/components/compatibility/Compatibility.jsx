@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
-import "./styles/app.css";
-function App() {
+import "../../styles/app.css";
+import Form from 'react-bootstrap/Form';
+
+
+const LicenseCompatibility = ()=> {
   const [inputState, setInputState] = useState({
     action_type: "",
     organization_id: "",
@@ -226,4 +229,4 @@ function App() {
   );
 }
 
-export default App;
+export default LicenseCompatibility;
