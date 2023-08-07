@@ -1,0 +1,23 @@
+{
+  "name": "opensource-license-compatibility",
+  "version": "1.0.0",
+  "description": "",
+  "main": "App.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "license",
+    "compatibility",
+    "check"
+  ],
+  "author": "Victor Yohanna",
+  "license": "ISC",
+  "peerDependencies": {
+    "bootstrap": "^5.3.1",
+    "dotenv": "^16.3.1",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.8.0",
+    "react-dom": "^18.2.0"
+  }
+}

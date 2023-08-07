@@ -1,0 +1,44 @@
+.dashboard{
+    /* border: 1px solid black; */
+    width: 70%;
+    max-height: 450px;
+    margin: 20px auto;
+    padding: 25px;
+    font-size: 18px;
+    overflow-y: scroll;
+  -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+      box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+}
+
+.license-content{
+    padding: 1.5em;
+ 
+}
+
+.check-section{
+    margin: 10px 0;
+}
+.form-check-label{
+    font-weight: 700;
+}
+
+.compatibility-result{
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.license-details{
+    font-family: 'Times New Roman', Times, serif;
+}
+
+h5, h4{
+    font-weight: 700;
+}
+
+span{
+    font-weight: 400;
+}
+
+.license2{
+    margin: 20px 0;
+}
