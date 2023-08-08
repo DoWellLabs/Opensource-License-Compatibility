@@ -1,25 +1,47 @@
 @import "variables.scss";
 
-#dowell {
-  // border:1px solid black;
-  margin: 20px;
-  .app-title {
-    font-size: 28px;
-    font-weight: bold;
-    // margin-bottom: 1em;
-    text-align: center;
-  }
+// #dowell {
+//   // border:1px solid black;
+//   margin: 20px;
+//   .app-title {
+//     font-size: 28px;
+//     font-weight: bold;
+//     // margin-bottom: 1em;
+//     text-align: center;
+//   }
 
-  .app-services {
-    display: flex;
-    font-size: 16px;
-  }
-}
+//   .app-services {
+//     display: flex;
+//     font-size: 16px;
+//   }
+// }
 
 .dashboard {
+  width: 70%;
+  max-height: 450px;
+  margin: 20px auto;
   padding: 25px;
+  font-size: 18px;
+  overflow-y: scroll;
+  // padding: 25px;
   -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
-      box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+  box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+
+  .check-section {
+    margin: 10px 0;
+
+    .form-check {
+      display: flex;
+
+      .form-check-input {
+        margin-top: 5px;
+      }
+      .form-check-label {
+        font-weight: 700;
+      }
+    }
+  }
+
   .row {
     .col-md-5 {
       .license-content {
@@ -42,10 +64,9 @@
       }
       .license2 {
         margin: 15px 0;
-        
+
         p {
           font-size: 16px;
-         
         }
       }
     }

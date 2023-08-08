@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "proxy":"https://100080.pythonanywhere.com/api/public/licenses/",
   "scripts": {
     "build": "wp-scripts build",
     "start": "wp-scripts start",
