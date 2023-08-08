@@ -1,18 +1,13 @@
-import React,{useEffect} from "react"; 
-import Dashboard from "./components/Dashboard.jsx";
+import React from "react"; 
+import LicenseCompatibility from "./components/LicenseCompatibility.jsx";
 // require('dotenv').config()  
 const App = () => {
-  // useEffect(() => {
-  //   window.process = {
-  //     ...window.process,
-  //   };
 
-  // }, []);
   return (
     <div className="app">
-      <h1 className="app-title">Dowell Open-Source License Compatibility Check</h1>
-      <hr />
-      <Dashboard />
+      {/* <h1 className="app-title">Dowell Open-Source License Compatibility Check</h1>
+      <hr /> */}
+      <LicenseCompatibility />
     </div>
   );
 };
