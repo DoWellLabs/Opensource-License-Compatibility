@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
-import "../../styles/app.css";
-import Form from 'react-bootstrap/Form';
+import React, { useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min";
+import { sample_data } from "../data";
+import { formStyle } from "./styles";
 
-
-const LicenseCompatibility = ()=> {
+export const LicenseCompatibility = () => {
   const [inputState, setInputState] = useState({
     action_type: "",
     organization_id: "",
@@ -15,7 +16,6 @@ const LicenseCompatibility = ()=> {
   const [license1, setLicense1] = useState({});
   const [license2, setLicense2] = useState({});
   const [compatibiltyResult, setCompatibiltyResult] = useState("");
-  const [inputForm, setInputForm] = useState("");
   const [checked, setChecked] = useState(false);
   const [render, setRender] = useState("form");
 
@@ -32,6 +32,18 @@ const LicenseCompatibility = ()=> {
       [e.target.name]: e.target.value,
     }));
   };
+
+  // useEffect(() => {
+  //   sample_data.forEach((item) => {
+  //     item.percentage_of_compatibility <= 50
+  //       ? setCompatibiltyResult("Not Recommended")
+  //       : item.percentage_of_compatibility <= 70
+  //       ? setCompatibiltyResult("Recommended")
+  //       : setCompatibiltyResult("Highly Recommended");
+  //     setLicense1(item.license_1);
+  //     setLicense2(item.license_2);
+  //   });
+  // }, [license1]);
 
   const checkLicenseCompatibilty = async (e) => {
     e.preventDefault();
@@ -53,8 +65,9 @@ const LicenseCompatibility = ()=> {
         }
       );
 
-      if (!response.ok) {
-        throw new Error(`Error! status: ${response.status}`);
+      if (!response) {
+        alert("Request not send")
+        // throw new Error(`Error! status: ${response.status}`);
       } else {
         const result = await response.json();
         result.forEach((item) => {
@@ -73,8 +86,9 @@ const LicenseCompatibility = ()=> {
       return err;
     }
   };
+
   return (
-    <div className="dashboard">
+    <div className="container">
       {render === "form" ? (
         <>
           <div className="check-section">
@@ -179,7 +193,11 @@ const LicenseCompatibility = ()=> {
                     </div>
                   </div>
                   <div className="d-flex justify-content-end">
-                    <button type="submit" className="btn btn-primary">
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      // onClick={() => setRender("content")}
+                    >
                       Submit
                     </button>
                   </div>
@@ -192,41 +210,47 @@ const LicenseCompatibility = ()=> {
         <>
           <div className="license-details">
             <div className="compatibility-result">
-              <h4>Compatibility: {compatibiltyResult}</h4>
+              <h4 style={formStyle.compatibilityResult}>
+                Compatibility: {compatibiltyResult}
+              </h4>
             </div>
             <div className="license1">
-              <h4>
-                First License: <span>{license1.license_name}</span>
+              <h4 style={{ fontSize: 18, fontWeight: 700 }}>
+                FIRST LICENSE: <span>{license1.license_name}</span>
               </h4>
-              <h5>
+              <h5 style={formStyle.h5}>
                 Version: <span>{license1.version}</span>{" "}
               </h5>
-              <h5>
+              <h5 style={formStyle.h5}>
                 Type : <span>{license1.type_of_license}</span>{" "}
               </h5>
-              <h5>Decsription:</h5>
+              <h5 style={formStyle.h5}>Decsription:</h5>
               <p>{license1.description}</p>
-              <h5>Risk:</h5> <p>{license1.risk_for_choosing_license}</p>
-              <h5>Liability:</h5> <p>{license1.limitation_of_liability}</p>
-              <h5>Disclaimer:</h5> <p>{license1.disclaimer}</p>
+              <h5 style={formStyle.h5}>Risk:</h5>{" "}
+              <p>{license1.risk_for_choosing_license}</p>
+              <h5 style={formStyle.h5}>Liability:</h5>{" "}
+              <p>{license1.limitation_of_liability}</p>
+              <h5 style={formStyle.h5}>Disclaimer:</h5>{" "}
+              <p>{license1.disclaimer}</p>
             </div>
             <div className="license2">
-              <h4>
-                Second License : <span>{license2.license_name}</span>
+              <h4 style={{ fontSize: 18, fontWeight: 700 }}>
+                SECOND LICENSE : <span>{license2.license_name}</span>
               </h4>
-              <h5>Version: {license2.version}</h5>
-              <h5>Type: {license2.type_of_license}</h5>
-              <h5>Decsription:</h5>
+              <h5 style={formStyle.h5}>Version: {license2.version}</h5>
+              <h5 style={formStyle.h5}>Type: {license2.type_of_license}</h5>
+              <h5 style={formStyle.h5}>Decsription:</h5>
               <p>{license2.description}</p>
-              <h5>Risk:</h5> <p>{license2.risk_for_choosing_license}</p>
-              <h5>Liability:</h5> <p>{license2.limitation_of_liability}</p>
-              <h5>Disclaimer:</h5> <p> {license2.disclaimer}</p>
+              <h5 style={formStyle.h5}>Risk:</h5>{" "}
+              <p>{license2.risk_for_choosing_license}</p>
+              <h5 style={formStyle.h5}>Liability:</h5>{" "}
+              <p>{license2.limitation_of_liability}</p>
+              <h5 style={formStyle.h5}>Disclaimer:</h5>{" "}
+              <p> {license2.disclaimer}</p>
             </div>
           </div>
         </>
       )}
     </div>
   );
-}
-
-export default LicenseCompatibility;
+};

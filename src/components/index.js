@@ -1,2 +1,2 @@
 
-export {default as LicenseCompatibility} from './compatibility/Compatibility.jsx';
+export * from './compatibility/LicenseCompatibility.jsx'
