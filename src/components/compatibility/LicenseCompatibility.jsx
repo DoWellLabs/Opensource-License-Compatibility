@@ -58,16 +58,16 @@ export const LicenseCompatibility = () => {
 
     try {
       const response = await fetch(
-        "https://100080.pythonanywhere.com/api/public/licenses",
+        "https://100080.pythonanywhere.com/api",
         {
-          method: "PoST",
-          data,
+          method: "POST",
+          data
         }
       );
 
       if (!response) {
-        alert("Request not send")
-        // throw new Error(`Error! status: ${response.status}`);
+        
+        throw new Error(`Error! status: ${response.status}`);
       } else {
         const result = await response.json();
         result.forEach((item) => {
