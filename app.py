@@ -10,14 +10,13 @@ from doWellOpensourceLicenseCompatibility import doWellOpensourceLicenseCompatib
 
 app = Flask(__name__)
 # MAKE SURE TO CHANGE TO YOUR APP NUMBER!!!!!
-app_id = 375266
+app_id = '<github-app-id>'
 # Read the bot certificate
 with open(
-        os.path.normpath(os.path.expanduser('~/.certs/github/legalzard-bot.2023-08-13.private-key.pem')),
+        os.path.normpath(os.path.expanduser('<local-githug-privatekey>')),
         'r'
 ) as cert_file:
     app_key = cert_file.read()
-
 # Create an GitHub integration instance
 git_integration = GithubIntegration(
     app_id,
@@ -55,16 +54,15 @@ def legalzard_bot():
         p_license = p.get('licenseConcluded', None)
         if p_license is None:
             continue
-
+        # separate combined licenses
         for l in re.sub(r'\([^()]*\)', '', p_license).split(" "):
             if l not in ["AND", "OR"]:
                 package_license_ids.add(l)
 
-    print(package_license_ids)
-
+    # Empty set guard clause
     if len(package_license_ids) == 0:
         return "ok"
-
+    # Get spdx license data
     spdx_request = requests.get("https://spdx.org/licenses/licenses.json")
     if spdx_request.status_code != 200:
         return "ok"
@@ -75,36 +73,34 @@ def legalzard_bot():
     repo_license = legalzard_api.search(repo_license_id).get("data")[0]
     repo_license_event_id = repo_license.get("eventId")
 
+    #  initialize issues
     incompatible_licenses = ""
-
     # run comparison with package licenses
     for l_id in package_license_ids:
         try:
             # get license
             l_name = next(lnc for lnc in licenses if lnc["licenseId"] == l_id)["name"]
-
+            # prpepare comparison data
             _pkg_license = legalzard_api.search(l_name).get("data")[0]
             _pkg_license_event_id = _pkg_license.get("eventId")
-
             compatibility = legalzard_api.check_compatibility({
                 "license_event_id_one": repo_license_event_id,
                 "license_event_id_two": _pkg_license_event_id,
             })["is_compatible"]
-
+            # skip compatible licenses
             if compatibility:
                 continue
-
+            # log incompatible licenses
             incompatible_licenses += f"{l_name}\n"
-
         except Exception as e:
             pass
-
-    issue= f"Legalzard found licenses in your dependecies that are incompatible with your repository license\n\n {incompatible_licenses}"
-
+    # prepare and write issue
+    issue= f"Legalzard found licenses in your dependencies that are incompatible with your repository license\n\n {incompatible_licenses}"
     repo.create_issue(title="Incompatible Licenses", body=issue)
     return "ok"
 
 
 
 if __name__ == '__main__':
+    # run server
     app.run(debug=True, port=5000)
