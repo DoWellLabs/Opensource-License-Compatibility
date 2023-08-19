@@ -11,7 +11,6 @@ export const LicenseCompatibility = () => {
     user_id: "",
     license_event_id_one: "",
     license_event_id_two: "",
-    
   });
 
   const [license1, setLicense1] = useState({});
@@ -36,8 +35,6 @@ export const LicenseCompatibility = () => {
   };
 
   const compareLicense = async () => {
-  
-
     const data = {
       action_type: inputState.action_type,
       organization_id: inputState.organization_id,
@@ -46,7 +43,7 @@ export const LicenseCompatibility = () => {
       license_event_id_two: inputState.license_event_id_two,
     };
     const headers = {
-      "API-KEY": "2ab7d114-0351-418c-a149-2a50e9f70389",
+      "API-KEY": "YOU API KEY",
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
       Accept: "application/json",
@@ -55,25 +52,24 @@ export const LicenseCompatibility = () => {
     await axios
       .post("https://100080.pythonanywhere.com/api/licenses/", data, headers)
       .then((response) => {
-         
-    const result =  response.data;
-   console.log(result.percentage_of_compatibility)
+        const result = response.data;
+        console.log(result.percentage_of_compatibility);
 
-        if(result.percentage_of_compatibility<= 50){
-          setCompatibiltyResult("Not Recommended")
-        }else if(result.percentage_of_compatibility <= 70){
-          setCompatibiltyResult("Recommended")
-        }else{
+        if (result.percentage_of_compatibility > 70) {
           setCompatibiltyResult("Highly Recommended");
+        } else if (
+          result.percentage_of_compatibility >= 50 &&
+          result.percentage_of_compatibility <= 70
+        ) {
+          setCompatibiltyResult("Recommended");
+        } else {
+          setCompatibiltyResult("Not Recommended");
         }
-      
-        
-      // setLicense1(item.license_1);
-      // setLicense2(item.license_2);
-   
 
-    setRender("content");
-        
+        // setLicense1(item.license_1);
+        // setLicense2(item.license_2);
+
+        setRender("content");
       })
       .catch((error) => {
         console.log("Error Message: ", error);
@@ -101,8 +97,7 @@ export const LicenseCompatibility = () => {
         console.log(result.success);
 
         if (result.success === true) {
-          compareLicense()
-          
+          compareLicense();
         } else {
           console.log("Unsuccessful");
         }
@@ -136,7 +131,7 @@ export const LicenseCompatibility = () => {
           ) : (
             <div className="license-content card">
               <div className="terms-text card-body">
-                <form onSubmit={checkLicenseCompatibilty} >
+                <form onSubmit={checkLicenseCompatibilty}>
                   <div className="row">
                     <div className="col-md-6">
                       <div className="mb-3">
@@ -218,11 +213,7 @@ export const LicenseCompatibility = () => {
                     </div>
                   </div>
                   <div className="d-flex justify-content-end">
-                    <button
-                      type="submit"
-                      className="btn btn-primary"
-                      
-                    >
+                    <button type="submit" className="btn btn-primary">
                       Check License Compatibility
                     </button>
                   </div>
