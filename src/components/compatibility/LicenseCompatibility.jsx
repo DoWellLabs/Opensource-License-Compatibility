@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
-import { sample_data } from "../data";
+import axios from "axios";
 import { formStyle } from "./styles";
 
 export const LicenseCompatibility = () => {
@@ -11,6 +11,7 @@ export const LicenseCompatibility = () => {
     user_id: "",
     license_event_id_one: "",
     license_event_id_two: "",
+    
   });
 
   const [license1, setLicense1] = useState({});
@@ -18,6 +19,7 @@ export const LicenseCompatibility = () => {
   const [compatibiltyResult, setCompatibiltyResult] = useState("");
   const [checked, setChecked] = useState(false);
   const [render, setRender] = useState("form");
+  const [resStatus, setResStatus] = useState();
 
   const handleChange = (e) => {
     setInputState((prevState) => ({
@@ -33,20 +35,8 @@ export const LicenseCompatibility = () => {
     }));
   };
 
-  // useEffect(() => {
-  //   sample_data.forEach((item) => {
-  //     item.percentage_of_compatibility <= 50
-  //       ? setCompatibiltyResult("Not Recommended")
-  //       : item.percentage_of_compatibility <= 70
-  //       ? setCompatibiltyResult("Recommended")
-  //       : setCompatibiltyResult("Highly Recommended");
-  //     setLicense1(item.license_1);
-  //     setLicense2(item.license_2);
-  //   });
-  // }, [license1]);
-
-  const checkLicenseCompatibilty = async (e) => {
-    e.preventDefault();
+  const compareLicense = async () => {
+  
 
     const data = {
       action_type: inputState.action_type,
@@ -55,36 +45,71 @@ export const LicenseCompatibility = () => {
       license_event_id_one: inputState.license_event_id_one,
       license_event_id_two: inputState.license_event_id_two,
     };
+    const headers = {
+      "API-KEY": "2ab7d114-0351-418c-a149-2a50e9f70389",
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      Accept: "application/json",
+    };
 
-    try {
-      const response = await fetch(
-        "https://100080.pythonanywhere.com/api",
-        {
-          method: "POST",
-          data
+    await axios
+      .post("https://100080.pythonanywhere.com/api/licenses/", data, headers)
+      .then((response) => {
+         
+    const result =  response.data;
+   console.log(result.percentage_of_compatibility)
+
+        if(result.percentage_of_compatibility<= 50){
+          setCompatibiltyResult("Not Recommended")
+        }else if(result.percentage_of_compatibility <= 70){
+          setCompatibiltyResult("Recommended")
+        }else{
+          setCompatibiltyResult("Highly Recommended");
         }
-      );
-
-      if (!response) {
+      
         
-        throw new Error(`Error! status: ${response.status}`);
-      } else {
-        const result = await response.json();
-        result.forEach((item) => {
-          item.percentage_of_compatibility <= 50
-            ? setCompatibiltyResult("Not Recommended")
-            : item.percentage_of_compatibility <= 70
-            ? setCompatibiltyResult("Recommended")
-            : setCompatibiltyResult("Highly Recommended");
-          setLicense1(item.license_1);
-          setLicense2(item.license_2);
-        });
+      // setLicense1(item.license_1);
+      // setLicense2(item.license_2);
+   
 
-        setRender("content");
-      }
-    } catch (err) {
-      return err;
-    }
+    setRender("content");
+        
+      })
+      .catch((error) => {
+        console.log("Error Message: ", error);
+      });
+  };
+
+  const checkLicenseCompatibilty = async (e) => {
+    e.preventDefault();
+
+    const serviceData = {
+      sub_service_ids: ["ADD DOWELL SUB SERVICE ID"],
+      service_id: "DOWELL SERVICE ID",
+    };
+    const url = "https://100105.pythonanywhere.com/api/v3/process-services/";
+
+    await axios
+      .post(url, serviceData, {
+        params: {
+          type: "module_service",
+          api_key: "YOUR API KEY",
+        },
+      })
+      .then((response) => {
+        const result = response.data;
+        console.log(result.success);
+
+        if (result.success === true) {
+          compareLicense()
+          
+        } else {
+          console.log("Unsuccessful");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -111,7 +136,7 @@ export const LicenseCompatibility = () => {
           ) : (
             <div className="license-content card">
               <div className="terms-text card-body">
-                <form onSubmit={checkLicenseCompatibilty}>
+                <form onSubmit={checkLicenseCompatibilty} >
                   <div className="row">
                     <div className="col-md-6">
                       <div className="mb-3">
@@ -196,9 +221,9 @@ export const LicenseCompatibility = () => {
                     <button
                       type="submit"
                       className="btn btn-primary"
-                      // onClick={() => setRender("content")}
+                      
                     >
-                      Submit
+                      Check License Compatibility
                     </button>
                   </div>
                 </form>
@@ -214,7 +239,12 @@ export const LicenseCompatibility = () => {
                 Compatibility: {compatibiltyResult}
               </h4>
             </div>
-            <div className="license1">
+            {/* 
+              THIS FORM IS MEANT TO PROVIDE DETAILS OF THE TWO LICENSES COMPARED
+              IT'S COMMENTED OUT FOR NOW
+            */}
+
+            {/* <div className="license1">
               <h4 style={{ fontSize: 18, fontWeight: 700 }}>
                 FIRST LICENSE: <span>{license1.license_name}</span>
               </h4>
@@ -232,8 +262,8 @@ export const LicenseCompatibility = () => {
               <p>{license1.limitation_of_liability}</p>
               <h5 style={formStyle.h5}>Disclaimer:</h5>{" "}
               <p>{license1.disclaimer}</p>
-            </div>
-            <div className="license2">
+            </div> */}
+            {/* <div className="license2">
               <h4 style={{ fontSize: 18, fontWeight: 700 }}>
                 SECOND LICENSE : <span>{license2.license_name}</span>
               </h4>
@@ -247,7 +277,7 @@ export const LicenseCompatibility = () => {
               <p>{license2.limitation_of_liability}</p>
               <h5 style={formStyle.h5}>Disclaimer:</h5>{" "}
               <p> {license2.disclaimer}</p>
-            </div>
+            </div> */}
           </div>
         </>
       )}
