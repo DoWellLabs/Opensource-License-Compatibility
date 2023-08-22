@@ -1,5 +1,5 @@
 {
-  "name": "uxlivinglabs-license-compatibility",
+  "name": "dowell-license",
   "version": "1.0.0",
   "description": "The Opensource License Compatibility Check package establish how two licenses are compatible with each other",
   "main": "dist/index.cjs.js",
@@ -11,7 +11,7 @@
     "build": "rollup -c"
   },
   "keywords": [],
-  "author": "Victor Yohanna",
+  "author": "uxliving lab",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.22.10",
