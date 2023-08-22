@@ -28,4 +28,4 @@ This is done with the following steps:
 
 ## Limitations
 
-This application only checks for incompatible licenses in the repository's direct dependencies and does not check for transitive dependencies. It also requires a valid doWell API key to function properly.
+This application only checks for incompatible licenses in the repository's direct dependencies and does not check for transitive dependencies. It also requires a valid Dowell API key to function properly.
