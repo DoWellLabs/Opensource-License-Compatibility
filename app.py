@@ -7,7 +7,7 @@ import requests
 from flask import Flask, request
 from github import Github, GithubIntegration
 from doWellOpensourceLicenseCompatibility import doWellOpensourceLicenseCompatibility
-# documentation added
+
 app = Flask(__name__)
 # MAKE SURE TO CHANGE TO YOUR APP NUMBER!!!!!
 app_id = '<github-app-id>'
