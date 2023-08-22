@@ -4,7 +4,11 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import axios from "axios";
 import { formStyle } from "./styles";
 
-export const LicenseCompatibility = () => {
+
+const apiKey = process.env.API_KEY;
+
+ export function LicenseCompatibility(){
+
   const [inputState, setInputState] = useState({
     action_type: "",
     organization_id: "",
@@ -15,7 +19,7 @@ export const LicenseCompatibility = () => {
 
   const [license1, setLicense1] = useState({});
   const [license2, setLicense2] = useState({});
-  const [compatibiltyResult, setCompatibiltyResult] = useState("");
+  const [compatibiltyResult, setCompatibiltyResult] = useState();
   const [checked, setChecked] = useState(false);
   const [render, setRender] = useState("form");
   const [resStatus, setResStatus] = useState();
@@ -43,7 +47,7 @@ export const LicenseCompatibility = () => {
       license_event_id_two: inputState.license_event_id_two,
     };
     const headers = {
-      "API-KEY": "YOU API KEY",
+      "API-KEY": apiKey,
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
       Accept: "application/json",
@@ -53,7 +57,7 @@ export const LicenseCompatibility = () => {
       .post("https://100080.pythonanywhere.com/api/licenses/", data, headers)
       .then((response) => {
         const result = response.data;
-        console.log(result.percentage_of_compatibility);
+        //console.log(result.percentage_of_compatibility)
 
         if (result.percentage_of_compatibility > 70) {
           setCompatibiltyResult("Highly Recommended");
@@ -80,8 +84,8 @@ export const LicenseCompatibility = () => {
     e.preventDefault();
 
     const serviceData = {
-      sub_service_ids: ["ADD DOWELL SUB SERVICE ID"],
-      service_id: "DOWELL SERVICE ID",
+      sub_service_ids: ["DOWELL100301"],
+      service_id: "DOWELL10030",
     };
     const url = "https://100105.pythonanywhere.com/api/v3/process-services/";
 
@@ -89,7 +93,7 @@ export const LicenseCompatibility = () => {
       .post(url, serviceData, {
         params: {
           type: "module_service",
-          api_key: "YOUR API KEY",
+          api_key: apiKey,
         },
       })
       .then((response) => {
@@ -98,6 +102,7 @@ export const LicenseCompatibility = () => {
 
         if (result.success === true) {
           compareLicense();
+          
         } else {
           console.log("Unsuccessful");
         }
@@ -230,11 +235,6 @@ export const LicenseCompatibility = () => {
                 Compatibility: {compatibiltyResult}
               </h4>
             </div>
-            {/* 
-              THIS FORM IS MEANT TO PROVIDE DETAILS OF THE TWO LICENSES COMPARED
-              IT'S COMMENTED OUT FOR NOW
-            */}
-
             {/* <div className="license1">
               <h4 style={{ fontSize: 18, fontWeight: 700 }}>
                 FIRST LICENSE: <span>{license1.license_name}</span>
@@ -275,3 +275,8 @@ export const LicenseCompatibility = () => {
     </div>
   );
 };
+
+
+
+
+
