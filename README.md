@@ -23,6 +23,7 @@ This is done with the following steps:
 - Gets all the available licenses from spdx.org as a json file
 - Using the `doWellOpensourceLicenseCompatibility`'s search function, gets the first icence in the list
 - Runs the `doWellOpensourceLicenseCompatibility`'s `check_compatibility` function against each successive licence (if the first occurance is not compatible), but using the eventID obtained after using the licence name from the search function.
+
 3. If any incompatible licenses are found, the bot creates an issue titled "Incompatible Licenses" and lists all incompatible licenses in the issue body.
 
 ## Limitations
