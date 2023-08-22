@@ -4,8 +4,9 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import axios from "axios";
 import { formStyle } from "./styles";
 
-
-const apiKey = process.env.API_KEY;
+const apiKey = import.meta.env.VITE_API_KEY; 
+const serviceID = import.meta.env.VITE_SERVICE_ID; 
+const subID = import.meta.env.VITE_SUB_SERVICE_ID;
 
  export function LicenseCompatibility(){
 
@@ -17,8 +18,6 @@ const apiKey = process.env.API_KEY;
     license_event_id_two: "",
   });
 
-  const [license1, setLicense1] = useState({});
-  const [license2, setLicense2] = useState({});
   const [compatibiltyResult, setCompatibiltyResult] = useState();
   const [checked, setChecked] = useState(false);
   const [render, setRender] = useState("form");
@@ -70,9 +69,6 @@ const apiKey = process.env.API_KEY;
           setCompatibiltyResult("Not Recommended");
         }
 
-        // setLicense1(item.license_1);
-        // setLicense2(item.license_2);
-
         setRender("content");
       })
       .catch((error) => {
@@ -84,8 +80,8 @@ const apiKey = process.env.API_KEY;
     e.preventDefault();
 
     const serviceData = {
-      sub_service_ids: ["DOWELL100301"],
-      service_id: "DOWELL10030",
+      sub_service_ids: [subID],
+      service_id: serviceID,
     };
     const url = "https://100105.pythonanywhere.com/api/v3/process-services/";
 
