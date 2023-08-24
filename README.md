@@ -1,6 +1,6 @@
 # Legalzard Bot
 
-This is a Python Flask application that acts as a bot to check for incompatible licenses in a GitHub repository's dependencies and create an issue if any are found. The bot uses the `Github` and `requests` libraries to access the repository and its dependencies. It also uses the `doWellOpensourceLicenseCompatibility` library to check for license compatibility.
+This is a Python Flask Webhook that acts as a bot to check for incompatible licenses in a GitHub repository's dependencies and create an issue if any are found. The bot uses the `Github` and `requests` libraries to access the repository and its dependencies. It also uses the `doWellOpensourceLicenseCompatibility` library to check for license compatibility.
 
 ## Installation
 
@@ -8,7 +8,15 @@ This is a Python Flask application that acts as a bot to check for incompatible 
 2. Install the required libraries using `pip install -r requirements.txt`
 3. Replace `<github-app-id>` with your GitHub App ID and `<local-githug-privatekey>` with the path to your GitHub App private key file.
 4. Replace `<api-key>` with your doWell API key.
-5. Deploy the application to a server or cloud platform (eg. Ngrok or render.com).
+5. Deploy the Webhook to a server or cloud platform (e.g render.com).
+6. Create new github app Pass in the live address as the webhook and
+7. Configure the `Meta`, `Issues` and `Content` permissions
+
+
+
+To setup the github app;
+1. Navigate to Profile > Settings > Github Apps
+2. 
 
 
 ## Usage
@@ -28,4 +36,4 @@ This is done with the following steps:
 
 ## Limitations
 
-This application only checks for incompatible licenses in the repository's direct dependencies and does not check for transitive dependencies. It also requires a valid Dowell API key to function properly.
+This Webhook only checks for incompatible licenses in the repository's direct dependencies and does not check for transitive dependencies. It also requires a valid Dowell API key to function properly.
