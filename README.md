@@ -38,8 +38,6 @@ function App() {
 //handle form input field state
   const [inputState, setInputState] = useState({
     actionType: "",
-    organizationID: "",
-    userID: "",
     firstLicenseID: "",
     secondLicenseID: "",
   });
@@ -56,8 +54,7 @@ function App() {
       apiKey: process.env.API_KEY,
       license_event_id_one: inputState.firstLicenseID,
       license_event_id_two: inputState.secondLicenseID,
-      organization_id: inputState.organizationID,
-      user_id: inputState.userID,
+     
     });
 
     //The result is a JSON object returned with percentage_of_compatibility and other properties which gives a brief description of the licenses compared 
@@ -80,18 +77,17 @@ export default App;
 
 compareLicenses( 
     apiKey,
-    organization_id,
-    user_id,
     license_event_id_one,
     license_event_id_two,)
 
 are used to initiates comparison between two licenses.
 
 1. -`apiKey`: Your API key for accessing the process module service.
-2. -`organization_id`: Your organization ID .
-3. -`license_event_id_one`: First license ID.
-4. -`license_event_id_two`: Second License ID.
-5. -`callbackUrl`: Optional User iD.
+2. -`license_event_id_one`: First license ID.
+3. -`license_event_id_two`: Second License ID.
+
+### Note: 
+The ` license_event_id_one` and `license_event_id_two` are unique identifiers for the licenses to be compared
 
 
 ### License

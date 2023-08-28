@@ -1,8 +1,6 @@
 class OpensourceLicenseCompatibility {
   async compareLicenses({
     apiKey,
-    organization_id,
-    user_id,
     license_event_id_one,
     license_event_id_two,
   }) {
@@ -16,8 +14,6 @@ class OpensourceLicenseCompatibility {
           action_type: "check-compatibility",
           license_event_id_one,
           license_event_id_two,
-          organization_id,
-          user_id,
       };
         const header = {
           "API-KEY": apiKey,
