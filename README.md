@@ -31,7 +31,7 @@ The license compatibility liberary require user ```apiKey``` and user ```organiz
 ```javascript
 
 import { useState} from "react";
-import { OpensourceLicenseCompatibility } from "v55comparev55";
+import { OpensourceLicenseCompatibility } from "dowell-licensecompatibility";
 
 function App() {
 
