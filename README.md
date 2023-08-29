@@ -9,14 +9,21 @@ This is a Python Flask Webhook that acts as a bot to check for incompatible lice
 3. Replace `<github-app-id>` with your GitHub App ID and `<local-githug-privatekey>` with the path to your GitHub App private key file.
 4. Replace `<api-key>` with your doWell API key.
 5. Deploy the Webhook to a server or cloud platform (e.g render.com).
-6. Create new github app Pass in the live address as the webhook and
+6. Create new github app. Pass in the live address as the webhook and
 7. Configure the `Meta`, `Issues` and `Content` permissions
 
+## Creating and Configuring the Github App
 
+1. Log in to your GitHub account.
+2. Go to your account settings and click on **Developer settings**.
+3. Click on **GitHub Apps** and then **New GitHub App**.
+4. Fill out the required fields such as the app name, description, and homepage URL.
+5. Configure the app permissions, events,  and installation options.
+6. Generate a private key and store it securely. The path should be provided in place of the `<local-githug-privatekey>`
+7. Install the GitHub App on the repositories you want to monitor.
+8. Use the app's credentials to authenticate and access the GitHub API. It should be used in place of the `<github-app-id>`
 
-To setup the github app;
-1. Navigate to Profile > Settings > Github Apps
-2. 
+For more detailed instructions, you can refer to the official [GitHub documentation on creating and configuring GitHub apps](https://docs.github.com/en/developers/apps/creating-a-github-app).
 
 
 ## Usage
