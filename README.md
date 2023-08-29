@@ -19,7 +19,7 @@ This is a Python Flask Webhook that acts as a bot to check for incompatible lice
 3. Click on **GitHub Apps** and then **New GitHub App**.
 4. Fill out the required fields such as the app name, description, webhook and homepage URL.
 5. Configure the app permissions, events,  and installation options.
-6. Generate a private key and store it securely. The path should be provided in place of the `<local-githug-privatekey>`
+6. Generate a private key and store it securely. The path to the private key file should be provided in place of the `<local-githug-privatekey>`
 7. Install the GitHub App on the repositories you want to monitor.
 8. Use the app's credentials to authenticate and access the GitHub API. It should be used in place of the `<github-app-id>`
 
