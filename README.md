@@ -6,7 +6,7 @@
 
 - The Opensource License Compatibility Check package establish how two licenses are compatible with each other. This is a percentage estimate of how likely it is to recommend use of two softwares under the two licenses in one project.
 
-- To check how two license are compatible with each other, you are require to provide the first license Id and the second license id in the respective input fields. select action type from the dropdown input field and enter your user Id (optional), enter organization Id and submit.
+- To check how two license are compatible with each other, you are require to provide the first license name and the second license  in the respective input fields and  submit.
 
 ### Installation
 
@@ -24,7 +24,7 @@ With yarn:
 
 ## Usage
 
-The license compatibility liberary require user ```apiKey``` and user ```organization id``` followed by ```first license id``` and  ```second license id``` for compatibility check. 
+The license compatibility liberary require user ```apiKey```, followed by ```first license name``` and  ```second license name``` for compatibility check. 
 
 ### Example using function component
 
@@ -37,9 +37,8 @@ function App() {
 
 //handle form input field state
   const [inputState, setInputState] = useState({
-    actionType: "",
-    firstLicenseID: "",
-    secondLicenseID: "",
+    first_license_name: "",
+    second_license_name: "",
   });
 
   const checkState = (e) => {
@@ -52,12 +51,15 @@ function App() {
   const checkLicenseCompatibility = () => {
     const result = new OpensourceLicenseCompatibility().compareLicenses({
       apiKey: process.env.API_KEY,
-      license_event_id_one: inputState.firstLicenseID,
-      license_event_id_two: inputState.secondLicenseID,
+      first_license_name: inputState.first_license_name,
+      second_license_name: inputState.second_license_name,
      
+    }).then(response=>{
+      console.log(response)
+      
+    //The result is a JSON object returned with percentage_of_compatibility and other properties which gives a brief description of the licenses compared 
     });
 
-    //The result is a JSON object returned with percentage_of_compatibility and other properties which gives a brief description of the licenses compared 
     
     console.log(result)
   };
@@ -77,18 +79,12 @@ export default App;
 
 compareLicenses( 
     apiKey,
-    license_event_id_one,
-    license_event_id_two,)
+    first_license_name,
+    second_license_name,)
 
 are used to initiates comparison between two licenses.
 
 1. -`apiKey`: Your API key for accessing the process module service.
-2. -`license_event_id_one`: First license ID.
-3. -`license_event_id_two`: Second License ID.
-
-### Note: 
-The ` license_event_id_one` and `license_event_id_two` are unique identifiers for the licenses to be compared
-
 
 ### License
 
