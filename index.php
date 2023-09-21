@@ -14,14 +14,10 @@
  */
 
 
-add_action('admin_menu', 'dowell_init_menu');
 
-/**
- * Init Admin Menu.
- *
- * @return void
- */
-function dowell_init_menu()
+//Admin Settings page
+
+function dowell_menu()
 {
   add_menu_page(
 
@@ -35,35 +31,36 @@ function dowell_init_menu()
   );
 }
 
-/**
- * Init Admin Page.
- *
- * @return void
- */
+//load file 
 function dowell_admin_page()
 {
   require_once plugin_dir_path(__FILE__) . 'templates/app.php';
 }
 
-function compatibility($content)
-{
+//Render page content
+add_action('admin_menu', 'dowell_menu');
+/**---------------------------------------------------------------- */
 
-  ob_start();
-  $content =   require_once plugin_dir_path(__FILE__) . 'templates/app.php';
-  if (is_file($content)) {
-    @include($content);
-  }
 
-  return ob_get_clean();
-}
+//Add shortcode function
 
-add_shortcode('dowell', 'compatibility');
+// function compatibility($content)
+// {
 
-/**
- * Enqueue scripts and styles.
- *
- * @return void
- */
+//   ob_start();
+//   $content =   require_once plugin_dir_path(__FILE__) . 'templates/app.php';
+//   if (is_file($content)) {
+//     @include($content);
+//   }
+
+//   return ob_get_clean();
+// }
+
+// add_shortcode('dowell', 'compatibility');
+/**-------------------------------------------------------------------------- */
+
+/** Enqueue scripts and styles. */
+
 function dowell_admin_enqueue_scripts()
 {
   wp_enqueue_style('dowell-style', plugin_dir_url(__FILE__) . 'build/index.css');
@@ -72,7 +69,7 @@ function dowell_admin_enqueue_scripts()
 
 add_action('admin_enqueue_scripts', 'dowell_admin_enqueue_scripts');
 
-
+// register shortcode
 function displayReactApp()
 {
   ob_start();
@@ -81,8 +78,8 @@ function displayReactApp()
 <?php return ob_get_clean();
 }
 
-// register shortcode
-add_shortcode('displayReactApp', 'displayReactApp');
+
+add_shortcode('dowell', 'displayReactApp');
 add_action('wp_enqueue_scripts', 'enq_react');
 
 function enq_react()
@@ -99,3 +96,5 @@ function enq_react()
   wp_localize_script('display-react', 'object', ""); //localize script to pass PHP data to JS
   wp_enqueue_script('display-react');
 }
+
+

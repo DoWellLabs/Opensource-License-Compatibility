@@ -1,29 +1,15 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { sample_data } from "../data";
+import { useState } from "react";
+
+
 import { formStyle } from "./styles";
 
 const LicenseCompatibility = () => {
-  const [inputState, setInputState] = useState({
-    action_type: "",
-    organization_id: "",
-    user_id: "",
-    license_event_id_one: "",
-    license_event_id_two: "",
-  });
-
-  const [license1, setLicense1] = useState({});
-  const [license2, setLicense2] = useState({});
+  
   const [compatibiltyResult, setCompatibiltyResult] = useState("");
   const [checked, setChecked] = useState(false);
   const [render, setRender] = useState("form");
-
-  const handleChange = (e) => {
-    setInputState((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
-  };
+  const [firstLicenseName, setFirstLicenseName] = useState("");
+  const [secondLicenseName, setSecondLicenseName] = useState("");
 
   const checkState = (e) => {
     setChecked((prevState) => ({
@@ -32,70 +18,153 @@ const LicenseCompatibility = () => {
     }));
   };
 
-  useEffect(() => {
-    sample_data.forEach((item) => {
-      item.percentage_of_compatibility <= 50
-        ? setCompatibiltyResult("Not Recommended")
-        : item.percentage_of_compatibility <= 70
-        ? setCompatibiltyResult("Recommended")
-        : setCompatibiltyResult("Highly Recommended");
-      setLicense1(item.license_1);
-      setLicense2(item.license_2);
-    });
-  }, [license1]);
+  async function retrieveFirstLicenseId({firstLicenseName}){
+    try {
+      const response = await fetch(
+        `https://100080.pythonanywhere.com/api/licenses/?search_term=${firstLicenseName}&action_type=search`
+      );
+      const first_response = await response.json();
+      console.log("first response", first_response)
+      return first_response.data[0].eventId;
+    } catch (error) {
+      return JSON.stringify(error);
+    }
+
+  }
+
+  async function retrieveSecondLicenseId({secondLicenseName}){
+    try {
+      const response = await fetch(
+        `https://100080.pythonanywhere.com/api/licenses/?search_term=${secondLicenseName}&action_type=search`
+      );
+      const second_response = await response.json();
+      console.log("second response", second_response)
+      return second_response.data[0].eventId;
+    } catch (error) {
+      return JSON.stringify(error);
+    }
+  
+}
+
+async function processServicesRequest({ apiKey }) {
+  try {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sub_service_ids: ["DOWELL100301"],
+        service_id: "DOWELL10030",
+      }),
+      redirect: "follow",
+    };
+
+    const service_url = `https://100105.pythonanywhere.com/api/v3/process-services/?type=module_service&api_key=${apiKey}`;
+
+    const serviceResponse = await fetch(service_url, requestOptions);
+    return serviceResponse.text();
+  } catch (error) {
+    return JSON.stringify(error);
+  }
+}
 
   const checkLicenseCompatibilty = async (e) => {
     e.preventDefault();
 
-    const data = {
-      action_type: inputState.action_type,
-      organization_id: inputState.organization_id,
-      user_id: inputState.user_id,
-      license_event_id_one: inputState.license_event_id_one,
-      license_event_id_two: inputState.license_event_id_two,
-    };
-
-    // action_type: "check-compatibility",
-    // organization_id: "63cf89a0dcc2a171957b290b",
-    // user_id: 609,
-    // license_event_id_one: "FB1010000000016839611235973491",
-    // license_event_id_two: "FB1010000000016844191805602953",
-
-    const headers = {
-      "API-KEY": "de4b3cd2-4d2a-4652-ba62-29a174c037ee",
-      "Content-Type": "application/json",
-    };
-
     try {
-      const response = await fetch(
-        "https://100080.pythonanywhere.com/api/public/licenses",
-        {
-          method: "PoST",
-          data,
-          headers,
-        }
-      );
+      const firstLicenseEventId = await retrieveFirstLicenseId({firstLicenseName})
+    const secondLicenseEventId = await retrieveSecondLicenseId({secondLicenseName})
 
-      if (!response.ok) {
-        throw new Error(`Error! status: ${response.status}`);
-        
+    if (firstLicenseEventId !== "" || secondLicenseEventId !== "") {
+      const serviceResult = await this.processServicesRequest({ apiKey });
+
+      if (JSON.parse(serviceResult).success == false) {
+        return serviceResult.message;
       } else {
-        const result = await response.json();
-        result.forEach((item) => {
-          item.percentage_of_compatibility <= 50
-            ? setCompatibiltyResult("Not Recommended")
-            : item.percentage_of_compatibility <= 70
-            ? setCompatibiltyResult("Recommended")
-            : setCompatibiltyResult("Highly Recommended");
-          setLicense1(item.license_1);
-          setLicense2(item.license_2);
-        });
+        const data = {
+          action_type: "check-compatibility",
+          license_event_id_one: firstLicenseEventId,
+          license_event_id_two: secondLicenseEventId,
+        };
+        const header = {
+          "API-KEY": apiKey,
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          Accept: "application/json",
+        };
 
-        setRender("content");
+        const options = {
+          method: "POST",
+          headers: header,
+          body: data,
+        };
+
+        await fetch(
+          "https://100080.pythonanywhere.com/api/licenses/",
+          data,
+          options
+        )
+          .then((response) => {
+            const data = response.data;
+            let result = "";
+
+            if (data.percentage_of_compatibility > 70) {
+              result = "Highly Recommended";
+            } else if (
+              data.percentage_of_compatibility >= 50 &&
+              data.percentage_of_compatibility <= 70
+            ) {
+              result = "Recommended";
+            } else {
+              result = "Not Recommended";
+            }
+            return result;
+          })
+          .catch((error) => {
+            return error.message;
+          });
       }
-    } catch (err) {
-      return err;
+    } else {
+      return "Result not found";
     }
+
+    } catch (error) {
+      
+    }
+    //retrieve first license_id
+    
+    // try {
+    //   if (firstLicenseName == "" || secondLicenseName == "") {
+    //     return "Input field cannot be empty";
+    //   } else {
+    //     await axios
+    //       .get(
+    //         `https://100080.pythonanywhere.com/api/licenses/?search_term=${firstLicenseName}&action_type=search`
+    //       )
+    //       .then((response) => {
+    //         const status = response.data.isSuccess;
+    //         const licenseEventIdOne = response.data;
+    //         console.log(licenseEventIdOne);
+    //         if (status == "true") {
+    //           setFirstLicenseEventId(licenseEventIdOne.data[0].eventId);
+    //         }
+    //       });
+
+    //     await axios
+    //       .get(
+    //         `https://100080.pythonanywhere.com/api/licenses/?search_term=${secondLicenseName}&action_type=search`
+    //       )
+    //       .then((response) => {
+    //         const status = response.data.isSuccess;
+    //         const licenseEventIdTwo = response.data;
+    //         console.log(licenseEventIdTwo);
+    //         if (status == "true") {
+    //           setSecondLicenseEventId(licenseEventIdTwo.data[0].eventId);
+    //         }
+    //       });
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   return (
@@ -130,65 +199,20 @@ const LicenseCompatibility = () => {
                     <div className="col-md-6">
                       <div className="mb-3" style={{ marginBottom: 8 }}>
                         <label
-                          htmlFor="actionType"
-                          className="form-label"
-                          style={formStyle.label}
-                        >
-                          Action Type
-                        </label>
-                        <br />
-                        <select
-                          className="form-select"
-                          aria-label="Default select example"
-                          name="action_type"
-                          style={formStyle.select}
-                          value={inputState.action_type}
-                          onChange={handleChange}
-                        >
-                          <option>Select Type</option>
-                          <option>check-compatibility</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="mb-3" style={{ marginBottom: 8 }}>
-                        <label
-                          htmlFor="organizationId"
-                          className="form-label"
-                          style={formStyle.label}
-                        >
-                          Organization ID
-                        </label>
-                        <br />
-                        <input
-                          type="text"
-                          className="form-control form-control-sm"
-                          id="organizationId"
-                          name="organization_id"
-                          style={formStyle.input}
-                          value={inputState.organization_id}
-                          onChange={handleChange}
-                        />
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="mb-3" style={{ marginBottom: 8 }}>
-                        <label
                           htmlFor="firstLicenseId"
                           className="form-label"
                           style={formStyle.label}
                         >
-                          First License ID
+                          First License Name
                         </label>
                         <br />
                         <input
                           type="text"
                           className="form-control form-control-sm"
                           id="firstLicenseId"
-                          name="license_event_id_one"
+                          name="firstLicenseName"
                           style={formStyle.input}
-                          value={inputState.license_event_id_one}
-                          onChange={handleChange}
+                          onChange={(e) => setFirstLicenseName(e.target.value)}
                         />
                       </div>
                     </div>
@@ -199,39 +223,16 @@ const LicenseCompatibility = () => {
                           className="form-label"
                           style={formStyle.label}
                         >
-                          Second License ID
+                          Second License Name
                         </label>
                         <br />
                         <input
                           type="text"
                           className="form-control form-control-sm"
                           id="secondLicenseId"
-                          name="license_event_id_two"
+                          name="secondLicenseName"
                           style={formStyle.input}
-                          value={inputState.license_event_id_two}
-                          onChange={handleChange}
-                        />
-                      </div>
-                    </div>
-                    <div className="col-md-12">
-                      <div className="mb-3" style={{ marginBottom: 8 }}>
-                        <label
-                          htmlFor="userId"
-                          className="form-label"
-                          style={formStyle.label}
-                        >
-                          User ID
-                        </label>
-                        <br />
-                        <input
-                          type="text"
-                          className="form-control form-control-sm"
-                          id="userId"
-                          name="user_id"
-                          style={formStyle.input}
-                          value={inputState.user_id}
-                          onChange={handleChange}
-                          placeholder="Optional"
+                          onChange={(e) => setSecondLicenseName(e.target.value)}
                         />
                       </div>
                     </div>
@@ -241,7 +242,7 @@ const LicenseCompatibility = () => {
                       type="submit"
                       className="btn btn-primary"
                       style={formStyle.button}
-                      onClick={() => setRender("content")}
+                      onClick={checkLicenseCompatibilty}
                     >
                       Submit
                     </button>
