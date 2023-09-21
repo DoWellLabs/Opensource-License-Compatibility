@@ -1,10 +1,8 @@
 import { useState } from "react";
 
-
 import { formStyle } from "./styles";
 
 const LicenseCompatibility = () => {
-  
   const [compatibiltyResult, setCompatibiltyResult] = useState("");
   const [checked, setChecked] = useState(false);
   const [render, setRender] = useState("form");
@@ -18,153 +16,118 @@ const LicenseCompatibility = () => {
     }));
   };
 
-  async function retrieveFirstLicenseId({firstLicenseName}){
+  async function retrieveFirstLicenseId({ firstLicenseName }) {
     try {
       const response = await fetch(
         `https://100080.pythonanywhere.com/api/licenses/?search_term=${firstLicenseName}&action_type=search`
       );
       const first_response = await response.json();
-      console.log("first response", first_response)
+      console.log("first response", first_response);
       return first_response.data[0].eventId;
     } catch (error) {
       return JSON.stringify(error);
     }
-
   }
 
-  async function retrieveSecondLicenseId({secondLicenseName}){
+  async function retrieveSecondLicenseId({ secondLicenseName }) {
     try {
       const response = await fetch(
         `https://100080.pythonanywhere.com/api/licenses/?search_term=${secondLicenseName}&action_type=search`
       );
       const second_response = await response.json();
-      console.log("second response", second_response)
+      console.log("second response", second_response);
       return second_response.data[0].eventId;
     } catch (error) {
       return JSON.stringify(error);
     }
-  
-}
-
-async function processServicesRequest({ apiKey }) {
-  try {
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        sub_service_ids: ["DOWELL100301"],
-        service_id: "DOWELL10030",
-      }),
-      redirect: "follow",
-    };
-
-    const service_url = `https://100105.pythonanywhere.com/api/v3/process-services/?type=module_service&api_key=${apiKey}`;
-
-    const serviceResponse = await fetch(service_url, requestOptions);
-    return serviceResponse.text();
-  } catch (error) {
-    return JSON.stringify(error);
   }
-}
+
+  async function processServicesRequest({ apiKey }) {
+    try {
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sub_service_ids: ["DOWELL100301"],
+          service_id: "DOWELL10030",
+        }),
+        redirect: "follow",
+      };
+
+      const service_url = `https://100105.pythonanywhere.com/api/v3/process-services/?type=module_service&api_key=${apiKey}`;
+
+      const serviceResponse = await fetch(service_url, requestOptions);
+      return serviceResponse.text();
+    } catch (error) {
+      return JSON.stringify(error);
+    }
+  }
 
   const checkLicenseCompatibilty = async (e) => {
     e.preventDefault();
 
     try {
-      const firstLicenseEventId = await retrieveFirstLicenseId({firstLicenseName})
-    const secondLicenseEventId = await retrieveSecondLicenseId({secondLicenseName})
+      const firstLicenseEventId = await retrieveFirstLicenseId({
+        firstLicenseName,
+      });
+      const secondLicenseEventId = await retrieveSecondLicenseId({
+        secondLicenseName,
+      });
 
-    if (firstLicenseEventId !== "" || secondLicenseEventId !== "") {
-      const serviceResult = await this.processServicesRequest({ apiKey });
+      if (firstLicenseEventId !== "" || secondLicenseEventId !== "") {
+        const serviceResult = await this.processServicesRequest({ apiKey });
 
-      if (JSON.parse(serviceResult).success == false) {
-        return serviceResult.message;
+        if (JSON.parse(serviceResult).success == false) {
+          return serviceResult.message;
+        } else {
+          const data = {
+            action_type: "check-compatibility",
+            license_event_id_one: firstLicenseEventId,
+            license_event_id_two: secondLicenseEventId,
+          };
+          const header = {
+            "API-KEY": apiKey,
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            Accept: "application/json",
+          };
+
+          const options = {
+            method: "POST",
+            headers: header,
+            body: data,
+          };
+
+          await fetch(
+            "https://100080.pythonanywhere.com/api/licenses/",
+            data,
+            options
+          )
+            .then((response) => {
+              const data = response.data;
+              let result = "";
+
+              if (data.percentage_of_compatibility > 70) {
+                result = "Highly Recommended";
+              } else if (
+                data.percentage_of_compatibility >= 50 &&
+                data.percentage_of_compatibility <= 70
+              ) {
+                result = "Recommended";
+              } else {
+                result = "Not Recommended";
+              }
+              return result;
+            })
+            .catch((error) => {
+              return error.message;
+            });
+        }
       } else {
-        const data = {
-          action_type: "check-compatibility",
-          license_event_id_one: firstLicenseEventId,
-          license_event_id_two: secondLicenseEventId,
-        };
-        const header = {
-          "API-KEY": apiKey,
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          Accept: "application/json",
-        };
-
-        const options = {
-          method: "POST",
-          headers: header,
-          body: data,
-        };
-
-        await fetch(
-          "https://100080.pythonanywhere.com/api/licenses/",
-          data,
-          options
-        )
-          .then((response) => {
-            const data = response.data;
-            let result = "";
-
-            if (data.percentage_of_compatibility > 70) {
-              result = "Highly Recommended";
-            } else if (
-              data.percentage_of_compatibility >= 50 &&
-              data.percentage_of_compatibility <= 70
-            ) {
-              result = "Recommended";
-            } else {
-              result = "Not Recommended";
-            }
-            return result;
-          })
-          .catch((error) => {
-            return error.message;
-          });
+        return "Result not found";
       }
-    } else {
-      return "Result not found";
-    }
-
-    } catch (error) {
-      
-    }
-    //retrieve first license_id
-    
-    // try {
-    //   if (firstLicenseName == "" || secondLicenseName == "") {
-    //     return "Input field cannot be empty";
-    //   } else {
-    //     await axios
-    //       .get(
-    //         `https://100080.pythonanywhere.com/api/licenses/?search_term=${firstLicenseName}&action_type=search`
-    //       )
-    //       .then((response) => {
-    //         const status = response.data.isSuccess;
-    //         const licenseEventIdOne = response.data;
-    //         console.log(licenseEventIdOne);
-    //         if (status == "true") {
-    //           setFirstLicenseEventId(licenseEventIdOne.data[0].eventId);
-    //         }
-    //       });
-
-    //     await axios
-    //       .get(
-    //         `https://100080.pythonanywhere.com/api/licenses/?search_term=${secondLicenseName}&action_type=search`
-    //       )
-    //       .then((response) => {
-    //         const status = response.data.isSuccess;
-    //         const licenseEventIdTwo = response.data;
-    //         console.log(licenseEventIdTwo);
-    //         if (status == "true") {
-    //           setSecondLicenseEventId(licenseEventIdTwo.data[0].eventId);
-    //         }
-    //       });
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    } catch (error) {}
+   
   };
 
   return (

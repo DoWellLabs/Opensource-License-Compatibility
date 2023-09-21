@@ -157,43 +157,7 @@ const LicenseCompatibility = () => {
         return "Result not found";
       }
     } catch (error) {}
-    //retrieve first license_id
-
-    // try {
-    //   if (firstLicenseName == "" || secondLicenseName == "") {
-    //     return "Input field cannot be empty";
-    //   } else {
-    //     await axios
-    //       .get(
-    //         `https://100080.pythonanywhere.com/api/licenses/?search_term=${firstLicenseName}&action_type=search`
-    //       )
-    //       .then((response) => {
-    //         const status = response.data.isSuccess;
-    //         const licenseEventIdOne = response.data;
-    //         console.log(licenseEventIdOne);
-    //         if (status == "true") {
-    //           setFirstLicenseEventId(licenseEventIdOne.data[0].eventId);
-    //         }
-    //       });
-
-    //     await axios
-    //       .get(
-    //         `https://100080.pythonanywhere.com/api/licenses/?search_term=${secondLicenseName}&action_type=search`
-    //       )
-    //       .then((response) => {
-    //         const status = response.data.isSuccess;
-    //         const licenseEventIdTwo = response.data;
-    //         console.log(licenseEventIdTwo);
-    //         if (status == "true") {
-    //           setSecondLicenseEventId(licenseEventIdTwo.data[0].eventId);
-    //         }
-    //       });
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
   };
-
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "dashboard",
     style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.dashboard
