@@ -48,6 +48,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+//require('dotenv').config()  
+
+const apiKey = '';
 const LicenseCompatibility = () => {
   const [compatibiltyResult, setCompatibiltyResult] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)("");
   const [checked, setChecked] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
@@ -116,7 +119,7 @@ const LicenseCompatibility = () => {
         secondLicenseName
       });
       if (firstLicenseEventId !== "" || secondLicenseEventId !== "") {
-        const serviceResult = await undefined.processServicesRequest({
+        const serviceResult = await processServicesRequest({
           apiKey
         });
         if (JSON.parse(serviceResult).success == false) {
@@ -128,7 +131,7 @@ const LicenseCompatibility = () => {
             license_event_id_two: secondLicenseEventId
           };
           const header = {
-            "API-KEY": apiKey,
+            "API-KEY": "2ab7d114-0351-418c-a149-2a50e9f70389",
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
             Accept: "application/json"
@@ -140,6 +143,7 @@ const LicenseCompatibility = () => {
           };
           await fetch("https://100080.pythonanywhere.com/api/licenses/", data, options).then(response => {
             const data = response.data;
+            console.log("from data", data);
             let result = "";
             if (data.percentage_of_compatibility > 70) {
               result = "Highly Recommended";

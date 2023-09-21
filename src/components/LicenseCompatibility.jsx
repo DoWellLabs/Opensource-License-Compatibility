@@ -1,6 +1,8 @@
 import { useState } from "react";
-
 import { formStyle } from "./styles";
+//require('dotenv').config()  
+
+const apiKey = ''
 
 const LicenseCompatibility = () => {
   const [compatibiltyResult, setCompatibiltyResult] = useState("");
@@ -75,7 +77,7 @@ const LicenseCompatibility = () => {
       });
 
       if (firstLicenseEventId !== "" || secondLicenseEventId !== "") {
-        const serviceResult = await this.processServicesRequest({ apiKey });
+        const serviceResult = await processServicesRequest({ apiKey });
 
         if (JSON.parse(serviceResult).success == false) {
           return serviceResult.message;
@@ -86,7 +88,7 @@ const LicenseCompatibility = () => {
             license_event_id_two: secondLicenseEventId,
           };
           const header = {
-            "API-KEY": apiKey,
+            "API-KEY": "2ab7d114-0351-418c-a149-2a50e9f70389",
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
             Accept: "application/json",
@@ -105,6 +107,7 @@ const LicenseCompatibility = () => {
           )
             .then((response) => {
               const data = response.data;
+              console.log("from data", data)
               let result = "";
 
               if (data.percentage_of_compatibility > 70) {
