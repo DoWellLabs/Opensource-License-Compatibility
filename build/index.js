@@ -66,7 +66,7 @@ const LicenseCompatibility = () => {
     try {
       const response = await fetch(`https://100080.pythonanywhere.com/api/licenses/?search_term=${firstLicenseName}&action_type=search`);
       const first_response = await response.json();
-      //console.log("first response", first_response);
+      console.log("first response", first_response);
       return first_response.data[0].eventId;
     } catch (error) {
       return JSON.stringify(error);
@@ -78,7 +78,7 @@ const LicenseCompatibility = () => {
     try {
       const response = await fetch(`https://100080.pythonanywhere.com/api/licenses/?search_term=${secondLicenseName}&action_type=search`);
       const second_response = await response.json();
-      //console.log("second response", second_response);
+      console.log("second response", second_response);
       return second_response.data[0].eventId;
     } catch (error) {
       return JSON.stringify(error);
@@ -99,7 +99,7 @@ const LicenseCompatibility = () => {
       };
       const service_url = `https://100105.pythonanywhere.com/api/v3/process-services/?type=module_service&api_key=2ab7d114-0351-418c-a149-2a50e9f70389`;
       const serviceResponse = await fetch(service_url, requestOptions);
-      // console.log(serviceResponse)
+      console.log(serviceResponse);
       return serviceResponse.status;
     } catch (error) {
       return JSON.stringify(error);
@@ -136,27 +136,24 @@ const LicenseCompatibility = () => {
       // }
 
       if (firstLicenseEventId !== "" || secondLicenseEventId !== "") {
-        const serviceResult = await processServicesRequest();
+        const serviceStatus = await processServicesRequest();
         //console.log("from service result", serviceResult)
 
-        if (serviceResult === 200) {
+        if (serviceStatus === 200) {
           const data = {
             action_type: "check-compatibility",
             license_event_id_one: firstLicenseEventId,
             license_event_id_two: secondLicenseEventId
           };
-          const header = {
-            "API-KEY": "2ab7d114-0351-418c-a149-2a50e9f70389",
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            Accept: "application/json"
-          };
-          const options = {
+          await fetch("https://100080.pythonanywhere.com/api/licenses/", {
             method: "POST",
-            headers: header,
-            body: data
-          };
-          await fetch("https://100080.pythonanywhere.com/api/licenses/", data, options).then(response => {
+            body: data,
+            headers: {
+              "Content-Type": "application/json",
+              "api-key": ""
+            },
+            redirect: "follow"
+          }).then(response => {
             const data = response;
             console.log("from data", data);
             let result = "";
