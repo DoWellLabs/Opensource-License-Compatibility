@@ -55,10 +55,7 @@ const LicenseCompatibility = () => {
   const [firstLicenseName, setFirstLicenseName] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)("");
   const [secondLicenseName, setSecondLicenseName] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)("");
   const checkState = e => {
-    setChecked(prevState => ({
-      ...prevState,
-      [e.target.name]: e.target.value
-    }));
+    setChecked(!checked);
   };
   async function retrieveFirstLicenseId({
     firstLicenseName
@@ -66,7 +63,7 @@ const LicenseCompatibility = () => {
     try {
       const response = await fetch(`https://100080.pythonanywhere.com/api/licenses/?search_term=${firstLicenseName}&action_type=search`);
       const first_response = await response.json();
-      console.log("first response", first_response);
+      //console.log("first response", first_response);
       return first_response.data[0].eventId;
     } catch (error) {
       return JSON.stringify(error);
@@ -78,7 +75,7 @@ const LicenseCompatibility = () => {
     try {
       const response = await fetch(`https://100080.pythonanywhere.com/api/licenses/?search_term=${secondLicenseName}&action_type=search`);
       const second_response = await response.json();
-      console.log("second response", second_response);
+      //console.log("second response", second_response);
       return second_response.data[0].eventId;
     } catch (error) {
       return JSON.stringify(error);
@@ -97,9 +94,9 @@ const LicenseCompatibility = () => {
         }),
         redirect: "follow"
       };
-      const service_url = `https://100105.pythonanywhere.com/api/v3/process-services/?type=module_service&api_key=${apiKey}`;
+      const service_url = `https://100105.pythonanywhere.com/api/v3/process-services/?type=module_service&api_key=2ab7d114-0351-418c-a149-2a50e9f70389`;
       const serviceResponse = await fetch(service_url, requestOptions);
-      console.log(serviceResponse);
+      //console.log(serviceResponse);
       return serviceResponse.status;
     } catch (error) {
       return JSON.stringify(error);
@@ -124,15 +121,15 @@ const LicenseCompatibility = () => {
           };
           await fetch("https://100080.pythonanywhere.com/api/licenses/", {
             method: "POST",
-            body: data,
             headers: {
               "Content-Type": "application/json",
-              "api-key": ""
+              "api-key": "2ab7d114-0351-418c-a149-2a50e9f70389"
             },
+            body: data,
             redirect: "follow"
           }).then(response => {
             const data = response;
-            console.log("from data", data);
+            //console.log("from data", data);
             let result = "";
             if (data.percentage_of_compatibility > 70) {
               result = "Highly Recommended";
@@ -146,12 +143,14 @@ const LicenseCompatibility = () => {
             return error.message;
           });
         } else {
-          console.log("You are out of Credit");
+          return "You are out of Credit";
         }
       } else {
         return "Result not found";
       }
-    } catch (error) {}
+    } catch (error) {
+      return error.message;
+    }
   };
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "dashboard",
