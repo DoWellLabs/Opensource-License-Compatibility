@@ -94,7 +94,7 @@ const LicenseCompatibility = () => {
         }),
         redirect: "follow"
       };
-      const service_url = `https://100105.pythonanywhere.com/api/v3/process-services/?type=module_service&api_key=2ab7d114-0351-418c-a149-2a50e9f70389`;
+      const service_url = `https://100105.pythonanywhere.com/api/v3/process-services/?type=module_service&api_key=`;
       const serviceResponse = await fetch(service_url, requestOptions);
       //console.log(serviceResponse);
       return serviceResponse.status;
@@ -123,7 +123,7 @@ const LicenseCompatibility = () => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "api-key": "2ab7d114-0351-418c-a149-2a50e9f70389"
+              "api-key": ""
             },
             body: data,
             redirect: "follow"
