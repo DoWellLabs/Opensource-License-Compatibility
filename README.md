@@ -13,13 +13,13 @@
 With npm:
 
 ```javascript
-    npm install dowell-license-compatibility
+    npm install @dowell/licensecompatibility
 ```
 
 With yarn:
 
 ```javascript
-    yarn add dowell-license-compatibility
+    yarn add @dowell/licensecompatibility
 ```
 
 ## Usage
