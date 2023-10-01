@@ -35,11 +35,12 @@ import { OpensourceLicenseCompatibility } from "dowell-licensecompatibility";
 
 function App() {
 
-//handle form input field state
   const [inputState, setInputState] = useState({
     first_license_name: "",
     second_license_name: "",
   });
+
+  const [compatibilityResult, setCompatibilityResult] = useState("");
 
   const checkState = (e) => {
     setChecked((prevState) => ({
@@ -48,24 +49,34 @@ function App() {
     }));
   };
 
-  const checkLicenseCompatibility = () => {
-    const result = new OpensourceLicenseCompatibility().compareLicenses({
-      apiKey: process.env.API_KEY,
-      first_license_name: inputState.first_license_name,
-      second_license_name: inputState.second_license_name,
-     
-    }).then(response=>{
-      console.log(response)
-      
-    //The result is a JSON object returned with percentage_of_compatibility and other properties which gives a brief description of the licenses compared 
-    });
+  const checkLicenseCompatibility = async (e) => {
+    e.preventDefault();
 
-    
-    console.log(result)
+    const result = new OpensourceLicenseCompatibility()
+      .compareLicenses({
+        apiKey: process.env.REACT_APP_API_KEY,
+        first_license_name: inputState.first_license_name,
+        second_license_name: inputState.second_license_name,
+      })
+      .then((response) => {
+        try {
+          if (response) {
+            const compatibilityStatus = response;
+            setCompatibilityResult(compatibilityStatus);
+          } else {
+            setCompatibilityResult("Result not found");
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      });
   };
+
+
   return (
     <div className="App">
       <h1>Check License Compatibility</h1>
+      <h2>{compatibilityResult}</h2>
       <button onClick={checkLicenseCompatibility}>Click</button>
     </div>
   );

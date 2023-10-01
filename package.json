@@ -1,5 +1,5 @@
 {
-  "name": "dowell-licensecompatibility",
+  "name": "dowellopensourcelicensecompatibility",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
@@ -7,12 +7,11 @@
   "jsnext:main": "dist/index.es.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rollup -c"
+    "build": "webpack"
   },
   "keywords": [
     "license",
     "compatibility",
-    "check",
     "dowell",
     "api"
   ],
@@ -20,7 +19,8 @@
   "license": "Apache License 2.0",
   "peerDependencies": {
     "react": "^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0",
-    "react-dom": "^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0"
+    "react-dom": "^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0",
+    "axios": "^1.5.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.22.9",
@@ -28,14 +28,8 @@
     "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@babel/preset-env": "^7.22.9",
     "@babel/preset-react": "^7.22.5",
-    "@rollup/plugin-commonjs": "^25.0.4",
-    "@rollup/plugin-node-resolve": "^15.1.0",
+    "axios": "^1.5.1",
     "babel-loader": "^9.1.3",
-    "rollup": "^2.79.1",
-    "rollup-plugin-babel": "^4.4.0",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-peer-deps-external": "^2.2.4",
     "webpack-cli": "^5.1.4"
   }
 }
