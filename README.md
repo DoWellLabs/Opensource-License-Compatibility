@@ -1,6 +1,6 @@
 # DoWell Opensource-License-Compatibility
 
-## Version 1.0.0
+## Version 2.0.0
 
 ### Description
 
@@ -13,13 +13,13 @@
 With npm:
 
 ```javascript
-    npm install @dowell/licensecompatibility
+    npm install @dowelllabs/licensecompatibility
 ```
 
 With yarn:
 
 ```javascript
-    yarn add @dowell/licensecompatibility
+    yarn add @dowelllabs/licensecompatibility
 ```
 
 ## Usage
@@ -30,7 +30,7 @@ The license compatibility liberary require user `apiKey`, followed by `first lic
 
 ```javascript
 import { useState } from "react";
-import { OpensourceLicenseCompatibility } from "@dowell/licensecompatibility";
+import { OpensourceLicenseCompatibility } from "@dowelllabs/licensecompatibility";
 
 function App() {
   const [inputState, setInputState] = useState({
