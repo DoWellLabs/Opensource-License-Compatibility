@@ -1,6 +1,6 @@
 import "./App.css";
 import { useState} from "react";
-import { OpensourceLicenseCompatibility } from "@dowell/licensecompatibility";
+import { OpensourceLicenseCompatibility } from "@dowelllabs/licensecompatibility";
 import ClipLoader from "react-spinners/ClipLoader";
 
 function App() {

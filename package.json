@@ -1,6 +1,6 @@
 {
   "name": "licensecompatibility",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "private": true,
   "dependencies": {
     "@dowelllabs/dowellpayment": "^1.0.1",
