@@ -49,13 +49,26 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const LicenseCompatibility = () => {
-  const [compatibiltyResult, setCompatibiltyResult] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)("");
+  const [compatibilityResult, setCompatibilityResult] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)("");
   const [checked, setChecked] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
   const [render, setRender] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)("form");
   const [firstLicenseName, setFirstLicenseName] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)("");
   const [secondLicenseName, setSecondLicenseName] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)("");
-  const checkState = e => {
+  const [inputState, setInputState] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)({
+    first_license_name: "",
+    second_license_name: ""
+  });
+  const checkStatus = e => {
     setChecked(!checked);
+  };
+  const handleChangeState = e => {
+    setInputState(prevState => ({
+      ...prevState,
+      [e.target.name]: e.target.value
+    }));
+  };
+  const reset = () => {
+    setCompatibilityResult("");
   };
   async function retrieveFirstLicenseId({
     firstLicenseName
@@ -63,7 +76,6 @@ const LicenseCompatibility = () => {
     try {
       const response = await fetch(`https://100080.pythonanywhere.com/api/licenses/?search_term=${firstLicenseName}&action_type=search`);
       const first_response = await response.json();
-      //console.log("first response", first_response);
       return first_response.data[0].eventId;
     } catch (error) {
       return JSON.stringify(error);
@@ -75,7 +87,6 @@ const LicenseCompatibility = () => {
     try {
       const response = await fetch(`https://100080.pythonanywhere.com/api/licenses/?search_term=${secondLicenseName}&action_type=search`);
       const second_response = await response.json();
-      //console.log("second response", second_response);
       return second_response.data[0].eventId;
     } catch (error) {
       return JSON.stringify(error);
@@ -94,15 +105,14 @@ const LicenseCompatibility = () => {
         }),
         redirect: "follow"
       };
-      const service_url = `https://100105.pythonanywhere.com/api/v3/process-services/?type=module_service&api_key=`;
+      const service_url = `https://100105.pythonanywhere.com/api/v3/process-services/?type=module_service&api_key=2ab7d114-0351-418c-a149-2a50e9f70389`;
       const serviceResponse = await fetch(service_url, requestOptions);
-      //console.log(serviceResponse);
       return serviceResponse.status;
     } catch (error) {
       return JSON.stringify(error);
     }
   }
-  const checkLicenseCompatibilty = async e => {
+  const checkLicenseCompatibility = async e => {
     e.preventDefault();
     try {
       const firstLicenseEventId = await retrieveFirstLicenseId({
@@ -119,29 +129,21 @@ const LicenseCompatibility = () => {
             license_event_id_one: firstLicenseEventId,
             license_event_id_two: secondLicenseEventId
           };
-          await fetch("https://100080.pythonanywhere.com/api/licenses/", {
+          const response = await fetch("https://100080.pythonanywhere.com/api/licenses/", {
             method: "POST",
             headers: {
-              "Content-Type": "application/json",
-              "api-key": ""
+              "Content-Type": "application/json"
             },
-            body: data,
-            redirect: "follow"
-          }).then(response => {
-            const data = response;
-            //console.log("from data", data);
-            let result = "";
-            if (data.percentage_of_compatibility > 70) {
-              result = "Highly Recommended";
-            } else if (data.percentage_of_compatibility >= 50 && data.percentage_of_compatibility <= 70) {
-              result = "Recommended";
-            } else {
-              result = "Not Recommended";
-            }
-            return result;
-          }).catch(error => {
-            return error.message;
+            body: JSON.stringify(data)
           });
+          const compareResult = await response.json();
+          if (compareResult.percentage_of_compatibility > 70) {
+            setCompatibilityResult("Highly Recommended");
+          } else if (compareResult.percentage_of_compatibility >= 50 && compareResult.percentage_of_compatibility <= 70) {
+            setCompatibilityResult("Recommended");
+          } else {
+            setCompatibilityResult("Not Recommended");
+          }
         } else {
           return "You are out of Credit";
         }
@@ -153,122 +155,65 @@ const LicenseCompatibility = () => {
     }
   };
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "dashboard",
-    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.dashboard
-  }, render === "form" ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "check-section",
-    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.checkSection
+    className: "container"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "form-check"
+    className: "card"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "card-body"
+  }, compatibilityResult !== "" ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "show-recommendation"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, compatibilityResult), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    type: "button",
+    className: "btn-submit",
+    onClick: reset
+  }, "Ok")) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "check-section"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    className: "form-check-input",
+    className: "checkbox-input",
     type: "checkbox",
     name: "check",
     id: "flexCheckDefault",
     checked: checked,
-    onChange: checkState
+    onChange: checkStatus,
+    style: {
+      width: 18,
+      height: 18,
+      marginRight: "5px"
+    }
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    className: "form-check-label",
+    className: "checkbox-label",
     htmlFor: "flexCheckDefault"
-  }, "Check License Compatibility"))), checked === false ? "" : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "license-content",
-    style: {
-      marginTop: 10,
-      marginBottom: 10
-    }
+  }, "Check License Compatibility")), checked === true ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
+    onSubmit: checkLicenseCompatibility
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "terms-text card-body"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "row"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "col-md-6"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "mb-3",
-    style: {
-      marginBottom: 8
-    }
+    className: "mb-3"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "firstLicenseId",
-    className: "form-label",
-    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.label
+    htmlFor: "firstLicense",
+    className: "form-label"
   }, "First License Name"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "text",
-    className: "form-control form-control-sm",
-    id: "firstLicenseId",
-    name: "firstLicenseName",
-    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.input,
-    onChange: e => setFirstLicenseName(e.target.value)
-  }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "col-md-6"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "mb-3",
-    style: {
-      marginBottom: 8
-    }
+    className: "form-control",
+    id: "firstLicense",
+    name: "first_license_name",
+    value: inputState.first_license_name,
+    onChange: handleChangeState
+  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "mb-3"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "secondLicenseId",
-    className: "form-label",
-    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.label
+    htmlFor: "secondLicense"
   }, "Second License Name"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "text",
-    className: "form-control form-control-sm",
-    id: "secondLicenseId",
-    name: "secondLicenseName",
-    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.input,
-    onChange: e => setSecondLicenseName(e.target.value)
-  })))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "",
-    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.buttonSection
+    className: "form-control",
+    id: "secondLicense",
+    name: "second_license_name",
+    value: inputState.second_license_name,
+    onChange: handleChangeState
+  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "btn-wrapper"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     type: "submit",
-    className: "btn btn-primary",
-    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.button,
-    onClick: checkLicenseCompatibilty
-  }, "Submit")))))) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "license-details"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "compatibility-result"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
-    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.compatibilityResult
-  }, "Compatibility: ", compatibiltyResult)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "license1"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
-    style: {
-      fontSize: 18,
-      fontWeight: 700
-    }
-  }, "FIRST LICENSE: ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, license1.license_name)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
-    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.h5
-  }, "Version: ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, license1.version), " "), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
-    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.h5
-  }, "Type : ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, license1.type_of_license), " "), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
-    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.h5
-  }, "Decsription:"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, license1.description), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
-    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.h5
-  }, "Risk:"), " ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, license1.risk_for_choosing_license), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
-    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.h5
-  }, "Liability:"), " ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, license1.limitation_of_liability), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
-    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.h5
-  }, "Disclaimer:"), " ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, license1.disclaimer)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "license2"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
-    style: {
-      fontSize: 18,
-      fontWeight: 700
-    }
-  }, "SECOND LICENSE : ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, license2.license_name)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
-    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.h5
-  }, "Version: ", license2.version), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
-    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.h5
-  }, "Type: ", license2.type_of_license), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
-    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.h5
-  }, "Decsription:"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, license2.description), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
-    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.h5
-  }, "Risk:"), " ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, license2.risk_for_choosing_license), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
-    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.h5
-  }, "Liability:"), " ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, license2.limitation_of_liability), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
-    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.h5
-  }, "Disclaimer:"), " ", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, " ", license2.disclaimer)))));
+    className: "btn-submit"
+  }, "Submit"))) : ""))));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (LicenseCompatibility);
 
