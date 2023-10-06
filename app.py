@@ -7,13 +7,16 @@ import requests
 from flask import Flask, request
 from github import Github, GithubIntegration
 from doWellOpensourceLicenseCompatibility import doWellOpensourceLicenseCompatibility
+import smtplib
+from email.mime.text import MIMEText
 
 app = Flask(__name__)
 # MAKE SURE TO CHANGE TO YOUR APP NUMBER!!!!!
 app_id = '<github-app-id>'
 # Read the bot certificate
+path = "<local-githug-privatekey>"
 with open(
-        os.path.normpath(os.path.expanduser('<local-githug-privatekey>')),
+        os.path.normpath(os.path.expanduser(path)),
         'r'
 ) as cert_file:
     app_key = cert_file.read()
@@ -34,7 +37,15 @@ def legalzard_bot():
         return "ok"
     owner = payload['repository']['owner']['login']
     repo_name = payload['repository']['name']
-    # Get a git connection as our bot
+
+
+    #get the email from the github users endpoint, using the repo owner's name
+    user_info = requests.get(f'https://api.github.com/users/{owner}')
+
+    owner_email = user_info.json()['email']
+
+
+   # Get a git connection as our bot
     # Here is where we are getting the permission to talk as our bot and not
     # as a Python webservice
     github_auth = git_integration.get_access_token(git_integration.get_installation(owner, repo_name).id).token
@@ -97,9 +108,29 @@ def legalzard_bot():
     # prepare and write issue
     issue= f"Legalzard found licenses in your dependencies that are incompatible with your repository license\n\n {incompatible_licenses}"
     repo.create_issue(title="Incompatible Licenses", body=issue)
+
+    #set email payload
+    subject = "Incompatible Licenses - Legalzard Bot"
+    body = issue
+    sender = "marvin.wekesa@gmail.com"
+    password = "tntccgeyrevydnve"
+
+    #some of the emails are not shared, in this case the repo owner will 
+    # have to explicitly enable email notifications on all their repos
+    if owner_email == None:
+        pass
+    send_email(subject, body, sender, owner_email, password)
     return "ok"
 
-
+def send_email(subject, body, sender, owner_email, password):
+    msg = MIMEText(body)
+    msg['Subject'] = subject
+    msg['From'] = sender
+    msg['To'] = owner_email
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
+       smtp_server.login(sender, password)
+       smtp_server.sendmail(sender, owner_email, msg.as_string())
+    #print("Message sent!")
 
 if __name__ == '__main__':
     # run server
