@@ -134,30 +134,30 @@ const LicenseCompatibility = () => {
           {compatibilityResult !== "" ? (
             <div className="show-recommendation">
               <h2>{compatibilityResult}</h2>
-              <button type="button" className="btn-submit" onClick={reset}>
+              <button type="button" style={formStyle.button} onClick={reset}>
                 Ok
               </button>
             </div>
           ) : (
             <>
-              <div className="check-section">
+              <div style={{marginBottom: 20, marginTop:20}}>
                 <input
-                  className="checkbox-input"
+                  
                   type="checkbox"
                   name="check"
                   id="flexCheckDefault"
                   checked={checked}
                   onChange={checkStatus}
-                  style={{ width: 18, height: 18, marginRight: "5px" }}
+                  style={{ width: 18, height: 18, marginRight:5,  }}
                 />
-                <label className="checkbox-label" htmlFor="flexCheckDefault">
+                <label style={{fontSize: 18, fontWeight:600}}  htmlFor="flexCheckDefault">
                   Check License Compatibility
                 </label>
               </div>
               {checked === true ? (
                 <form onSubmit={checkLicenseCompatibility}>
                   <div className="mb-3">
-                    <label htmlFor="firstLicense" className="form-label">
+                    <label htmlFor="firstLicense" style={formStyle.label}>
                       First License Name
                     </label>
                     <br />
@@ -168,23 +168,25 @@ const LicenseCompatibility = () => {
                       name="first_license_name"
                       value={inputState.first_license_name}
                       onChange={handleChangeState}
+                      style={formStyle.input}
                     />
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="secondLicense">Second License Name</label>
+                    <label htmlFor="secondLicense" style={formStyle.label}>Second License Name</label>
                     <br />
                     <input
                       type="text"
-                      className="form-control"
+                      
                       id="secondLicense"
                       name="second_license_name"
                       value={inputState.second_license_name}
                       onChange={handleChangeState}
+                      style={formStyle.input}
                     />
                   </div>
 
                   <div className="btn-wrapper">
-                    <button type="submit" className="btn-submit">
+                    <button type="submit" style={formStyle.button}>
                       Submit
                     </button>
                   </div>

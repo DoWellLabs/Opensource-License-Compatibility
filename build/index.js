@@ -164,12 +164,14 @@ const LicenseCompatibility = () => {
     className: "show-recommendation"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, compatibilityResult), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     type: "button",
-    className: "btn-submit",
+    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.button,
     onClick: reset
   }, "Ok")) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "check-section"
+    style: {
+      marginBottom: 20,
+      marginTop: 20
+    }
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    className: "checkbox-input",
     type: "checkbox",
     name: "check",
     id: "flexCheckDefault",
@@ -178,10 +180,13 @@ const LicenseCompatibility = () => {
     style: {
       width: 18,
       height: 18,
-      marginRight: "5px"
+      marginRight: 5
     }
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    className: "checkbox-label",
+    style: {
+      fontSize: 18,
+      fontWeight: 600
+    },
     htmlFor: "flexCheckDefault"
   }, "Check License Compatibility")), checked === true ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
     onSubmit: checkLicenseCompatibility
@@ -189,30 +194,32 @@ const LicenseCompatibility = () => {
     className: "mb-3"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     htmlFor: "firstLicense",
-    className: "form-label"
+    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.label
   }, "First License Name"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "text",
     className: "form-control",
     id: "firstLicense",
     name: "first_license_name",
     value: inputState.first_license_name,
-    onChange: handleChangeState
+    onChange: handleChangeState,
+    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.input
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mb-3"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "secondLicense"
+    htmlFor: "secondLicense",
+    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.label
   }, "Second License Name"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("br", null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "text",
-    className: "form-control",
     id: "secondLicense",
     name: "second_license_name",
     value: inputState.second_license_name,
-    onChange: handleChangeState
+    onChange: handleChangeState,
+    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.input
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "btn-wrapper"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     type: "submit",
-    className: "btn-submit"
+    style: _styles__WEBPACK_IMPORTED_MODULE_2__.formStyle.button
   }, "Submit"))) : ""))));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (LicenseCompatibility);
@@ -245,7 +252,9 @@ const formStyle = {
   input: {
     fontSize: 16,
     width: 450,
-    height: 25
+    height: 25,
+    marginBottom: 10,
+    marginTop: 5
   },
   select: {
     fontSize: 16,
@@ -253,7 +262,8 @@ const formStyle = {
     height: 30
   },
   label: {
-    fontSize: 16
+    fontSize: 16,
+    marginTop: 10
   },
   button: {
     fontSize: 18,

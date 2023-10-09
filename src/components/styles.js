@@ -12,9 +12,9 @@ export const formStyle = {
     fontSize: 18,
     fontWeight: 700,
   },
-  input: { fontSize: 16, width: 450, height: 25 },
+  input: { fontSize: 16, width: 450, height: 25, marginBottom:10, marginTop:5 },
   select: { fontSize: 16, width: 450, height: 30 },
-  label: { fontSize: 16 },
+  label: { fontSize: 16, marginTop:10 },
   button: {
     fontSize: 18,
     fontStyle: "bold",

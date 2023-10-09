@@ -56,7 +56,7 @@ function displayReactApp()
 <?php return ob_get_clean();
 }
 
-add_shortcode('dowell', 'displayReactApp');
+add_shortcode('dowell-license', 'displayReactApp');
 add_action('wp_enqueue_scripts', 'enq_react');
 
 function enq_react()
