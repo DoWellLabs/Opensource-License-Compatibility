@@ -42,6 +42,9 @@ def legalzard_bot():
     #get the email from the github users endpoint, using the repo owner's name
     user_info = requests.get(f'https://api.github.com/users/{owner}')
 
+    # email_string = user_info.json()['email']
+
+    # owner_email = sanitizeEmail(email_string)
     owner_email = user_info.json()['email']
 
 
@@ -131,6 +134,9 @@ def send_email(subject, body, sender, owner_email, password):
        smtp_server.login(sender, password)
        smtp_server.sendmail(sender, owner_email, msg.as_string())
     #print("Message sent!")
+
+def sanitizeEmail(string):
+        return string.replace(',','').replace('"','')
 
 if __name__ == '__main__':
     # run server

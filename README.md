@@ -32,12 +32,14 @@ For more detailed instructions, you can refer to the official [GitHub documentat
 2. Whenever a new pull request is created, the bot checks for incompatible licenses in the repository's dependencies.
 This is done with the following steps:
 - Gets the licence ID from the REPO
+- Gets te owner's name from the repo, and uses it to get the owner's email from the `https://api.github.com/users/{owner}` endpoint
 - Runs the github authorization
 - Gets the repo's dependencies
 - Separates each license and adds them to a set
 - Gets all the available licenses from spdx.org as a json file
 - Using the `doWellOpensourceLicenseCompatibility`'s search function, gets the first icence in the list
 - Runs the `doWellOpensourceLicenseCompatibility`'s `check_compatibility` function against each successive licence (if the first occurance is not compatible), but using the eventID obtained after using the licence name from the search function.
+- If the user's email is not null, the webhook will send an email with the list of incompatible licences to the owner's email.
 
 3. If any incompatible licenses are found, the bot creates an issue titled "Incompatible Licenses" and lists all incompatible licenses in the issue body.
 
