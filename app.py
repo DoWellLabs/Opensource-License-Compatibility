@@ -112,9 +112,13 @@ def legalzard_bot():
     issue= f"Legalzard found licenses in your dependencies that are incompatible with your repository license\n\n {incompatible_licenses}"
     repo.create_issue(title="Incompatible Licenses", body=issue)
 
+    #format the table
+    table_rows = [f"<tr><td>Licence Detail</td><td>{i}</td></tr>" for i in incompatible_licenses]
+    table_html = "<table>" + "".join(table_rows) + "</table>"
+
     #set email payload
     subject = "Incompatible Licenses - Legalzard Bot"
-    body = issue
+    body = table_html
     sender = "marvin.wekesa@gmail.com"
     password = "tntccgeyrevydnve"
 
@@ -126,7 +130,7 @@ def legalzard_bot():
     return "ok"
 
 def send_email(subject, body, sender, owner_email, password):
-    msg = MIMEText(body)
+    msg = MIMEText(body, "html")
     msg['Subject'] = subject
     msg['From'] = sender
     msg['To'] = owner_email
