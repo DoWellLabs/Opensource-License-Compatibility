@@ -12,9 +12,9 @@ from email.mime.text import MIMEText
 
 app = Flask(__name__)
 # MAKE SURE TO CHANGE TO YOUR APP NUMBER!!!!!
-app_id = '<github-app-id>'
+app_id = '407051'#'<github-app-id>'
 # Read the bot certificate
-path = "<local-githug-privatekey>"
+path = 'C:/xampp/htdocs/vado/dowell/dennis/compatibility-bot/Opensource-License-Compatibility/keys/legaltester.pem'    #"<local-githug-privatekey>"
 with open(
         os.path.normpath(os.path.expanduser(path)),
         'r'
@@ -44,8 +44,9 @@ def legalzard_bot():
 
     # email_string = user_info.json()['email']
 
-    # owner_email = sanitizeEmail(email_string)
-    owner_email = user_info.json()['email']
+    owner_email = "georgekibew@gmail.com" #sanitizeEmail(email_string)
+    # owner_email = user_info.json()['email']
+    print(user_info)
 
 
    # Get a git connection as our bot
@@ -83,7 +84,7 @@ def legalzard_bot():
 
     licenses = spdx_request.json().get('licenses')
     # use the compatibility library
-    legalzard_api = doWellOpensourceLicenseCompatibility(api_key='<api-key>')
+    legalzard_api = doWellOpensourceLicenseCompatibility(api_key= 'bd4d19c4-1ee0-4746-9ec9-4824eb3662a3')#'<api-key>')
     repo_license = legalzard_api.search(repo_license_id).get("data")[0]
     repo_license_event_id = repo_license.get("eventId")
 
@@ -111,6 +112,7 @@ def legalzard_bot():
     # prepare and write issue
     issue= f"Legalzard found licenses in your dependencies that are incompatible with your repository license\n\n {incompatible_licenses}"
     repo.create_issue(title="Incompatible Licenses", body=issue)
+    print(incompatible_licenses)
 
     #format the table
     table_rows = [f"<tr><td>Licence Detail</td><td>{i}</td></tr>" for i in incompatible_licenses]
@@ -124,8 +126,8 @@ def legalzard_bot():
 
     #some of the emails are not shared, in this case the repo owner will 
     # have to explicitly enable email notifications on all their repos
-    if owner_email == None:
-        pass
+    # if owner_email == None:
+    #     pass
     send_email(subject, body, sender, owner_email, password)
     return "ok"
 
