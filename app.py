@@ -4,11 +4,46 @@ import re
 
 import requests
 
-from flask import Flask, request
+from flask import Flask, request, has_request_context
+import logging
+from flask.logging import default_handler
+from logging.handlers import RotatingFileHandler
 from github import Github, GithubIntegration
 from doWellOpensourceLicenseCompatibility import doWellOpensourceLicenseCompatibility
 import smtplib
 from email.mime.text import MIMEText
+
+#logging.basicConfig(filename="alllogs.log", format="%(levelname)s - %(name)s - %(message)s")
+
+logger = logging.getLogger()
+
+class RequestFormatter(logging.Formatter):
+    def format(self, record):
+        if has_request_context():
+            record.url = request.url
+            record.remote_addr = request.remote_addr
+        else:
+            record.url = None
+            record.remote_addr = None
+
+        return super().format(record)
+
+formatter = RequestFormatter('[%(asctime)s] %(remote_addr)s requested %(url)s : %(levelname)s in %(module)s: %(message)s')
+default_handler.setFormatter(formatter)
+
+#logFormatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
+#LogFrmatter("%(asctime)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
+
+#console handler for log
+consoleHandler = logging.StreamHandler()
+consoleHandler.setFormatter(formatter)
+logger.addHandler(consoleHandler)
+
+#file handler for log
+fileHandler = RotatingFileHandler("logs.log", backupCount=200, maxBytes=2048)
+fileHandler.setFormatter(formatter)
+logger.addHandler(fileHandler)
+
 
 app = Flask(__name__)
 # MAKE SURE TO CHANGE TO YOUR APP NUMBER!!!!!
@@ -44,7 +79,7 @@ def legalzard_bot():
 
     # email_string = user_info.json()['email']
 
-    owner_email = "georgekibew@gmail.com" #sanitizeEmail(email_string)
+    owner_email = "marin.wekesa@gmail.com" #sanitizeEmail(email_string)
     # owner_email = user_info.json()['email']
     print(user_info)
 
@@ -89,7 +124,8 @@ def legalzard_bot():
     repo_license_event_id = repo_license.get("eventId")
 
     #  initialize issues
-    incompatible_licenses = ""
+    incompatible_licenses = "" #f"{package_license_ids}" #"None of your bizworks"
+    truth = False
     # run comparison with package licenses
     for l_id in package_license_ids:
         try:
@@ -107,12 +143,14 @@ def legalzard_bot():
                 continue
             # log incompatible licenses
             incompatible_licenses += f"{l_name}\n"
+            truth = True
         except Exception as e:
             pass
     # prepare and write issue
-    issue= f"Legalzard found licenses in your dependencies that are incompatible with your repository license\n\n {incompatible_licenses}"
+    
+    issue= f"Legalzard found licenses in your dependencies that are incompatible with your repository license\n\n {incompatible_licenses}" if truth == True else f"Legalzard found no licence issues"
     repo.create_issue(title="Incompatible Licenses", body=issue)
-    print(incompatible_licenses)
+    #print(incompatible_licenses)
 
     #format the table
     table_rows = [f"<tr><td>Licence Detail</td><td>{i}</td></tr>" for i in incompatible_licenses]
@@ -129,6 +167,9 @@ def legalzard_bot():
     # if owner_email == None:
     #     pass
     send_email(subject, body, sender, owner_email, password)
+    
+    
+
     return "ok"
 
 def send_email(subject, body, sender, owner_email, password):
@@ -144,6 +185,6 @@ def send_email(subject, body, sender, owner_email, password):
 def sanitizeEmail(string):
         return string.replace(',','').replace('"','')
 
-if __name__ == '__main__':
+if __name__ == '__main__': 
     # run server
     app.run(debug=True, port=5000)
