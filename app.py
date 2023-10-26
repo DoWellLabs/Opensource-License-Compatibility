@@ -2,6 +2,9 @@
 import os
 import re
 
+from dotenv import load_dotenv
+
+
 import requests
 
 from flask import Flask, request, has_request_context
@@ -13,8 +16,10 @@ from doWellOpensourceLicenseCompatibility import doWellOpensourceLicenseCompatib
 import smtplib
 from email.mime.text import MIMEText
 
-#logging.basicConfig(filename="alllogs.log", format="%(levelname)s - %(name)s - %(message)s")
+# Load variables from .env file
+load_dotenv()
 
+#setup logging
 logger = logging.getLogger()
 
 class RequestFormatter(logging.Formatter):
@@ -31,9 +36,6 @@ class RequestFormatter(logging.Formatter):
 formatter = RequestFormatter('[%(asctime)s] %(remote_addr)s requested %(url)s : %(levelname)s in %(module)s: %(message)s')
 default_handler.setFormatter(formatter)
 
-#logFormatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
-#LogFrmatter("%(asctime)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
-
 #console handler for log
 consoleHandler = logging.StreamHandler()
 consoleHandler.setFormatter(formatter)
@@ -47,9 +49,9 @@ logger.addHandler(fileHandler)
 
 app = Flask(__name__)
 # MAKE SURE TO CHANGE TO YOUR APP NUMBER!!!!!
-app_id = '407051'#'<github-app-id>'
+app_id = os.getenv('GITHUB_APP_ID')
 # Read the bot certificate
-path = 'C:/xampp/htdocs/vado/dowell/dennis/compatibility-bot/Opensource-License-Compatibility/keys/legaltester.pem'    #"<local-githug-privatekey>"
+path =os.getenv('LOCAL_GITHUB_PRIVATEKEY')
 with open(
         os.path.normpath(os.path.expanduser(path)),
         'r'
@@ -78,11 +80,10 @@ def legalzard_bot():
     #get the email from the github users endpoint, using the repo owner's name
     user_info = requests.get(f'https://api.github.com/users/{owner}')
 
-    # email_string = user_info.json()['email']
+    email_string = user_info.json()['email']
 
-    owner_email = "marin.wekesa@gmail.com" #sanitizeEmail(email_string)
+    owner_email = sanitizeEmail(email_string)
     # owner_email = user_info.json()['email']
-    print(user_info)
 
 
    # Get a git connection as our bot
@@ -91,20 +92,20 @@ def legalzard_bot():
     github_auth = git_integration.get_access_token(git_integration.get_installation(owner, repo_name).id).token
     git_connection = Github(login_or_token=github_auth)
     repo = git_connection.get_repo(f"{owner}/{repo_name}")
+   
+   #getting a list of all the repo collaborators and then formatting by adding `@` before each name
+   #to simulate mentions. This will ensure each member gets notified via email
     members = repo.get_collaborators()
     for c in members:
         collaborators.append(c)
 
     collaborators = add_prefix(remove_prefix(collaborators))
-
-        
+     
 
     # get repo dependencies
     sbom_request = requests.get(f'https://api.github.com/repos/{owner}/{repo_name}/dependency-graph/sbom',
                                 headers={'Authorization':f'Bearer {github_auth}','X-GitHub-Api-Version': '2022-11-28'})
     
-    #collaborators = requests.get(f'https://api.github.com/repos/rezarex/bfl/collaborators')
-
     if sbom_request.status_code != 200:
         return "ok"
 
@@ -131,12 +132,12 @@ def legalzard_bot():
 
     licenses = spdx_request.json().get('licenses')
     # use the compatibility library
-    legalzard_api = doWellOpensourceLicenseCompatibility(api_key= 'bd4d19c4-1ee0-4746-9ec9-4824eb3662a3')#'<api-key>')
+    legalzard_api = doWellOpensourceLicenseCompatibility(api_key= os.getenv('API_KEY'))
     repo_license = legalzard_api.search(repo_license_id).get("data")[0]
     repo_license_event_id = repo_license.get("eventId")
 
     #  initialize issues
-    incompatible_licenses = [] #f"{package_license_ids}" #"None of your bizworks"
+    incompatible_licenses = []
     truth = False
     #run comparison with package licenses
     for l_id in package_license_ids:
@@ -168,25 +169,22 @@ def legalzard_bot():
     
     # prepare and write issue
     
-    issue= f"{collaborators}  Here is a list of collaborators found on your repo\n\n {incompatible_licenses}" if truth == True else f"{collaborators} Legalzard found no licence in your repo"
-    #f"Legalzard found licenses in your dependencies that are incompatible with your repository license\n\n {incompatible_licenses}" #if truth == True else f"Legalzard found no licence issues"
+    issue= f"{collaborators} Legalzard found licenses in your dependencies that are incompatible with your repository license\n\n {incompatible_licenses}" if truth == True else f"{collaborators} Legalzard found no license compatibility issues in your dependencies"
     repo.create_issue(title="Incompatible Licenses", body=issue)
     html_p = f"<p>Legalzard found no licence in your repo</p>"
-    #print(incompatible_licenses)
 
     #set email payload
     subject = "Incompatible Licenses - Legalzard Bot"
     body = table_html if truth == True else html_p
     sender = "marvin.wekesa@gmail.com"
-    password = "tntccgeyrevydnve"
+    password = os.getenv('GOOGLE_APP_PASSWORD')
 
     #some of the emails are not shared, in this case the repo owner will 
     # have to explicitly enable email notifications on all their repos
-    # if owner_email == None:
-    #     pass
+    if owner_email == None:
+        pass
     send_email(subject, body, sender, owner_email, password)
-    
-    
+      
 
     return "ok"
 
@@ -198,7 +196,6 @@ def send_email(subject, body, sender, owner_email, password):
     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
        smtp_server.login(sender, password)
        smtp_server.sendmail(sender, owner_email, msg.as_string())
-    #print("Message sent!")
 
 def sanitizeEmail(string):
         return string.replace(',','').replace('"','')
@@ -219,4 +216,4 @@ def add_prefix(names):
 
 if __name__ == '__main__': 
     # run server
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=os.getenv('PORT'))
