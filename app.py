@@ -64,6 +64,7 @@ git_integration = GithubIntegration(
 
 @app.route("/", methods=['POST'])
 def legalzard_bot():
+    collaborators = []
     # Get the event payload
     payload = request.json
     # get license information
@@ -90,9 +91,20 @@ def legalzard_bot():
     github_auth = git_integration.get_access_token(git_integration.get_installation(owner, repo_name).id).token
     git_connection = Github(login_or_token=github_auth)
     repo = git_connection.get_repo(f"{owner}/{repo_name}")
+    members = repo.get_collaborators()
+    for c in members:
+        collaborators.append(c)
+
+    collaborators = add_prefix(remove_prefix(collaborators))
+
+        
+
     # get repo dependencies
     sbom_request = requests.get(f'https://api.github.com/repos/{owner}/{repo_name}/dependency-graph/sbom',
                                 headers={'Authorization':f'Bearer {github_auth}','X-GitHub-Api-Version': '2022-11-28'})
+    
+    #collaborators = requests.get(f'https://api.github.com/repos/rezarex/bfl/collaborators')
+
     if sbom_request.status_code != 200:
         return "ok"
 
@@ -124,9 +136,9 @@ def legalzard_bot():
     repo_license_event_id = repo_license.get("eventId")
 
     #  initialize issues
-    incompatible_licenses = "" #f"{package_license_ids}" #"None of your bizworks"
+    incompatible_licenses = [] #f"{package_license_ids}" #"None of your bizworks"
     truth = False
-    # run comparison with package licenses
+    #run comparison with package licenses
     for l_id in package_license_ids:
         try:
             # get license
@@ -142,23 +154,29 @@ def legalzard_bot():
             if compatibility:
                 continue
             # log incompatible licenses
-            incompatible_licenses += f"{l_name}\n"
-            truth = True
+            incompatible_licenses.append(l_name) #+= f"{l_name}\n"
+            #truth = True
         except Exception as e:
             pass
+    
+    #check if any incompatible licenses were found
+    if len(incompatible_licenses) > 0:
+         #format the table
+        table_rows = [f"<tr><td>Licence Detail</td><td>{i}</td></tr>" for i in incompatible_licenses]
+        table_html = "<table>" + "".join(table_rows) + "</table>"
+        truth = True
+    
     # prepare and write issue
     
-    issue= f"Legalzard found licenses in your dependencies that are incompatible with your repository license\n\n {incompatible_licenses}" if truth == True else f"Legalzard found no licence issues"
+    issue= f"{collaborators}  Here is a list of collaborators found on your repo\n\n {incompatible_licenses}" if truth == True else f"{collaborators} Legalzard found no licence in your repo"
+    #f"Legalzard found licenses in your dependencies that are incompatible with your repository license\n\n {incompatible_licenses}" #if truth == True else f"Legalzard found no licence issues"
     repo.create_issue(title="Incompatible Licenses", body=issue)
+    html_p = f"<p>Legalzard found no licence in your repo</p>"
     #print(incompatible_licenses)
-
-    #format the table
-    table_rows = [f"<tr><td>Licence Detail</td><td>{i}</td></tr>" for i in incompatible_licenses]
-    table_html = "<table>" + "".join(table_rows) + "</table>"
 
     #set email payload
     subject = "Incompatible Licenses - Legalzard Bot"
-    body = table_html
+    body = table_html if truth == True else html_p
     sender = "marvin.wekesa@gmail.com"
     password = "tntccgeyrevydnve"
 
@@ -184,6 +202,20 @@ def send_email(subject, body, sender, owner_email, password):
 
 def sanitizeEmail(string):
         return string.replace(',','').replace('"','')
+
+
+def remove_prefix(users):
+    cleaned_users = []
+    for user in users:
+        login = user.login.replace('NamedUser(login="', '')
+        cleaned_users.append(login)
+    return cleaned_users
+
+def add_prefix(names):
+    prefixed_names = []
+    for name in names:
+        prefixed_names.append('@' + name)
+    return ' '.join(prefixed_names)
 
 if __name__ == '__main__': 
     # run server

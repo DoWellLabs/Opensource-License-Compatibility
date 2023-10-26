@@ -1,4 +1,5 @@
 .idea
+.env
 mailer.py
 keys
 myenv
