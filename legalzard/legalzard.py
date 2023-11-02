@@ -135,7 +135,7 @@ class Legalzard:
 
         """
         comparison_data['action_type'] = 'check-compatibility'
-        return self._response(requests.post(url=LEGALZARD_API, json=json.dumps(comparison_data), headers=self.headers))
+        return self._response(requests.post(url=LEGALZARD_API, json=comparison_data, headers=self.headers))
 
     def get_compatibility_history(self, organization_id: str = None, user_id: str = None):
         """
