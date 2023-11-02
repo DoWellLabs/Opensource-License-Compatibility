@@ -80,10 +80,10 @@ def legalzard_bot():
     #get the email from the github users endpoint, using the repo owner's name
     user_info = requests.get(f'https://api.github.com/users/{owner}')
 
-    email_string = user_info.json()['email']
+    #email_string = user_info.json()['email']
 
-    owner_email = sanitizeEmail(email_string)
-    # owner_email = user_info.json()['email']
+    #owner_email = sanitizeEmail(email_string)
+    owner_email = user_info.json()['email']
 
 
    # Get a git connection as our bot

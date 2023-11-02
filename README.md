@@ -40,9 +40,13 @@ This is done with the following steps:
 - Using the `doWellOpensourceLicenseCompatibility`'s search function, gets the first icence in the list
 - Runs the `doWellOpensourceLicenseCompatibility`'s `check_compatibility` function against each successive licence (if the first occurance is not compatible), but using the eventID obtained after using the licence name from the search function.
 - If the user's email is not null, the webhook will send an email with the list of incompatible licences to the owner's email.
+- The bot will also get  a list of contributors from the repo, the parse the string to add `@` at the begining of each username, then adds to a string `contributors`
 
 3. If any incompatible licenses are found, the bot creates an issue titled "Incompatible Licenses" and lists all incompatible licenses in the issue body.
+4. If no incompatible licenses are found, the bot still creates an issue titled "Incompatible Licenses" and creates a message stating no issues were found.
+5. In both instances, the bot prepends the `contributor` string before the body of the issue, ensuring that each of the contributors gets an email notification after the issue is created.
 
 ## Limitations
 
 This Webhook only checks for incompatible licenses in the repository's direct dependencies and does not check for transitive dependencies. It also requires a valid Dowell API key to function properly.
+The email to the reo owner will only work if the email field is not null, but this is taken care of when an issue is created because the repo owner and the other contributors still get an email notification of the issue.
