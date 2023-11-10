@@ -131,13 +131,13 @@ def legalzard_bot():
         return "ok"
 
     licenses = spdx_request.json().get('licenses')
-    # use the compatibility library
+    #use the compatibility library
     legalzard_api = doWellOpensourceLicenseCompatibility(api_key= os.getenv('API_KEY'))
-    repo_license = legalzard_api.search(repo_license_id).get("data")[0]
+    repo_license = legalzard_api.search(repo_license_id['key']).get("data")[0]
     repo_license_event_id = repo_license.get("eventId")
 
-    #  initialize issues
-    incompatible_licenses = []
+    #initialize issues
+    incompatible_licenses = "" #[]
     truth = False
     #run comparison with package licenses
     for l_id in package_license_ids:
@@ -155,8 +155,8 @@ def legalzard_bot():
             if compatibility:
                 continue
             # log incompatible licenses
-            incompatible_licenses.append(l_name) #+= f"{l_name}\n"
-            #truth = True
+            incompatible_licenses += f"{l_name}\n" #.append(l_name) #
+
         except Exception as e:
             pass
     
@@ -168,6 +168,9 @@ def legalzard_bot():
         truth = True
     
     # prepare and write issue
+
+
+    #
     
     issue= f"{collaborators} Legalzard found licenses in your dependencies that are incompatible with your repository license\n\n {incompatible_licenses}" if truth == True else f"{collaborators} Legalzard found no license compatibility issues in your dependencies"
     repo.create_issue(title="Incompatible Licenses", body=issue)

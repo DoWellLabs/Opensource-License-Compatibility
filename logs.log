@@ -1,3 +1,17 @@
-[2023-10-31 12:52:00,826] None requested None : INFO in _internal:  * Restarting with stat
-[2023-10-31 12:52:05,599] None requested None : WARNING in _internal:  * Debugger is active!
-[2023-10-31 12:52:05,619] None requested None : INFO in _internal:  * Debugger PIN: 126-176-884
+[2023-11-03 13:10:44,469] None requested None : INFO in _internal:  * Restarting with stat
+[2023-11-03 13:10:46,736] None requested None : WARNING in _internal:  * Debugger is active!
+[2023-11-03 13:10:46,758] None requested None : INFO in _internal:  * Debugger PIN: 126-176-884
+[2023-11-03 15:54:43,882] None requested None : INFO in _internal:  * Detected change in 'C:\\xampp\\htdocs\\vado\\dowell\\dennis\\cb\\Opensource-License-Compatibility\\app.py', reloading
+[2023-11-03 15:54:43,991] None requested None : INFO in _internal:  * Restarting with stat
+[2023-11-03 15:54:45,250] None requested None : WARNING in _internal:  * Debugger is active!
+[2023-11-03 15:54:45,257] None requested None : INFO in _internal:  * Debugger PIN: 126-176-884
+[2023-11-07 11:23:28,623] None requested None : INFO in _internal: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[2023-11-07 11:23:28,625] None requested None : INFO in _internal: [33mPress CTRL+C to quit[0m
+[2023-11-07 11:23:28,642] None requested None : INFO in _internal:  * Restarting with stat
+[2023-11-07 11:23:30,804] None requested None : WARNING in _internal:  * Debugger is active!
+[2023-11-07 11:23:30,828] None requested None : INFO in _internal:  * Debugger PIN: 126-176-884
+[2023-11-07 11:56:43,845] None requested None : INFO in _internal: 127.0.0.1 - - [07/Nov/2023 11:56:43] "[35m[1mPOST / HTTP/1.1[0m" 500 -
+[2023-11-07 11:56:45,945] None requested None : INFO in _internal: 127.0.0.1 - - [07/Nov/2023 11:56:45] "[35m[1mPOST / HTTP/1.1[0m" 500 -
+[2023-11-07 11:56:48,172] None requested None : INFO in _internal: 127.0.0.1 - - [07/Nov/2023 11:56:48] "[35m[1mPOST / HTTP/1.1[0m" 500 -
+[2023-11-07 11:56:48,530] None requested None : INFO in _internal: 127.0.0.1 - - [07/Nov/2023 11:56:48] "[35m[1mPOST / HTTP/1.1[0m" 500 -

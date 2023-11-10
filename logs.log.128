@@ -1,0 +1,17 @@
+[2023-11-03 12:54:57,685] None requested None : INFO in _internal: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[2023-11-03 12:54:57,712] None requested None : INFO in _internal: [33mPress CTRL+C to quit[0m
+[2023-11-03 12:54:57,722] None requested None : INFO in _internal:  * Restarting with stat
+[2023-11-03 12:54:59,799] None requested None : WARNING in _internal:  * Debugger is active!
+[2023-11-03 12:54:59,813] None requested None : INFO in _internal:  * Debugger PIN: 126-176-884
+[2023-11-03 12:56:55,438] None requested None : INFO in _internal: 127.0.0.1 - - [03/Nov/2023 12:56:55] "[35m[1mPOST / HTTP/1.1[0m" 500 -
+[2023-11-03 12:58:08,625] None requested None : INFO in _internal:  * Detected change in 'C:\\xampp\\htdocs\\vado\\dowell\\dennis\\cb\\Opensource-License-Compatibility\\test.py', reloading
+[2023-11-03 12:58:08,837] None requested None : INFO in _internal:  * Restarting with stat
+[2023-11-03 12:58:10,151] None requested None : WARNING in _internal:  * Debugger is active!
+[2023-11-03 12:58:10,173] None requested None : INFO in _internal:  * Debugger PIN: 126-176-884
+[2023-11-03 12:58:38,816] None requested None : INFO in _internal:  * Detected change in 'C:\\xampp\\htdocs\\vado\\dowell\\dennis\\cb\\Opensource-License-Compatibility\\test.py', reloading
+[2023-11-03 12:58:38,969] None requested None : INFO in _internal:  * Restarting with stat
+[2023-11-03 12:58:40,192] None requested None : WARNING in _internal:  * Debugger is active!
+[2023-11-03 12:58:40,204] None requested None : INFO in _internal:  * Debugger PIN: 126-176-884
+[2023-11-03 12:59:13,207] None requested None : INFO in _internal:  * Detected change in 'C:\\xampp\\htdocs\\vado\\dowell\\dennis\\cb\\Opensource-License-Compatibility\\test.py', reloading
+[2023-11-03 12:59:13,348] None requested None : INFO in _internal:  * Restarting with stat

@@ -1,0 +1,17 @@
+[2023-11-03 13:05:08,506] None requested None : INFO in _internal:  * Restarting with stat
+[2023-11-03 13:05:10,373] None requested None : WARNING in _internal:  * Debugger is active!
+[2023-11-03 13:05:10,387] None requested None : INFO in _internal:  * Debugger PIN: 126-176-884
+[2023-11-03 13:05:27,207] None requested None : INFO in _internal:  * Detected change in 'C:\\xampp\\htdocs\\vado\\dowell\\dennis\\cb\\Opensource-License-Compatibility\\test.py', reloading
+[2023-11-03 13:05:27,373] None requested None : INFO in _internal:  * Restarting with stat
+[2023-11-03 13:05:28,746] None requested None : WARNING in _internal:  * Debugger is active!
+[2023-11-03 13:05:28,759] None requested None : INFO in _internal:  * Debugger PIN: 126-176-884
+[2023-11-03 13:09:09,904] None requested None : INFO in _internal:  * Detected change in 'C:\\xampp\\htdocs\\vado\\dowell\\dennis\\cb\\Opensource-License-Compatibility\\app.py', reloading
+[2023-11-03 13:09:10,014] None requested None : INFO in _internal:  * Restarting with stat
+[2023-11-03 13:09:11,499] None requested None : WARNING in _internal:  * Debugger is active!
+[2023-11-03 13:09:11,509] None requested None : INFO in _internal:  * Debugger PIN: 126-176-884
+[2023-11-03 13:09:35,020] None requested None : INFO in _internal:  * Detected change in 'C:\\xampp\\htdocs\\vado\\dowell\\dennis\\cb\\Opensource-License-Compatibility\\app.py', reloading
+[2023-11-03 13:09:35,106] None requested None : INFO in _internal:  * Restarting with stat
+[2023-11-03 13:09:36,489] None requested None : WARNING in _internal:  * Debugger is active!
+[2023-11-03 13:09:36,502] None requested None : INFO in _internal:  * Debugger PIN: 126-176-884
+[2023-11-03 13:09:42,262] None requested None : INFO in _internal:  * Detected change in 'C:\\xampp\\htdocs\\vado\\dowell\\dennis\\cb\\Opensource-License-Compatibility\\app.py', reloading
+[2023-11-03 13:09:42,347] None requested None : INFO in _internal:  * Restarting with stat
