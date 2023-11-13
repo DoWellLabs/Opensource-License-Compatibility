@@ -50,3 +50,9 @@ This is done with the following steps:
 
 This Webhook only checks for incompatible licenses in the repository's direct dependencies and does not check for transitive dependencies. It also requires a valid Dowell API key to function properly.
 The email to the reo owner will only work if the email field is not null, but this is taken care of when an issue is created because the repo owner and the other contributors still get an email notification of the issue.
+
+# Installation on Github
+1. Open the link to the Github app `https://github.com/apps/legaltester`
+2. Click `configure`
+3. Select whether you would like to install on one specific repo or on all your repos then install in the option under `repository access`, then click save.
+4. Every time you push any changes to the repo where you have installed the app, it will trigger the webhook which will run the check_compatibility fuction and raise an issue to tell you the status of your licence compatibility
