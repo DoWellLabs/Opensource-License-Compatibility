@@ -1,0 +1,39 @@
+name: License Compatibility Check
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  license-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check license compatibility
+        run: python app.py
+
+      - name: Create issue if license issues found
+        if: ${{ success() && steps.check-licenses.outputs.incompatible_licenses != '' }}
+        uses: peter-evans/create-issue@v2
+        with:
+          title: License issues found
+          body: ${{ steps.check-licenses.outputs.incompatible_licenses }}
+
+      - name: Send email notification
+        if: ${{ success() && steps.check-licenses.outputs.incompatible_licenses != '' }}
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: License issues found in repository
+          body: ${{ steps.check-licenses.outputs.incompatible_licenses }}
+          to: ${{ secrets.EMAIL_TO }}
+          from: ${{ secrets.EMAIL_FROM }}
