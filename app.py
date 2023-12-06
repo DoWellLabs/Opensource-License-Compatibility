@@ -46,9 +46,9 @@ logger.addHandler(fileHandler)
 
 app = Flask(__name__)
 # MAKE SURE TO CHANGE TO YOUR APP NUMBER!!!!!
-app_id = '410179'
+app_id = '676400'
 # Read the bot certificate
-path = "/home/brandon/Downloads/mwinga-app.2023-10-18.private-key (1).pem"
+path = "/home/brandon/Downloads/izzoh-app.2023-12-06.private-key.pem"
 with open(
         os.path.normpath(os.path.expanduser(path)),
         'r'
