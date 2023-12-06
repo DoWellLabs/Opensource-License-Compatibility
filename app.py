@@ -1,12 +1,8 @@
 
 import os
 import re
-
 from dotenv import load_dotenv
-
-
 import requests
-
 from flask import Flask, request, has_request_context
 import logging
 from flask.logging import default_handler
@@ -15,6 +11,7 @@ from github import Github, GithubIntegration
 from doWellOpensourceLicenseCompatibility import doWellOpensourceLicenseCompatibility
 import smtplib
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 # Load variables from .env file
 load_dotenv()
@@ -49,9 +46,9 @@ logger.addHandler(fileHandler)
 
 app = Flask(__name__)
 # MAKE SURE TO CHANGE TO YOUR APP NUMBER!!!!!
-app_id = os.getenv('GITHUB_APP_ID')
+app_id = '410179'
 # Read the bot certificate
-path =os.getenv('LOCAL_GITHUB_PRIVATEKEY')
+path = "/home/brandon/Downloads/mwinga-app.2023-10-18.private-key (1).pem"
 with open(
         os.path.normpath(os.path.expanduser(path)),
         'r'
@@ -192,13 +189,26 @@ def legalzard_bot():
     return "ok"
 
 def send_email(subject, body, sender, owner_email, password):
-    msg = MIMEText(body, "html")
-    msg['Subject'] = subject
-    msg['From'] = sender
-    msg['To'] = owner_email
-    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
-       smtp_server.login(sender, password)
-       smtp_server.sendmail(sender, owner_email, msg.as_string())
+    try:
+        msg = MIMEMultipart()
+        msg['From'] = sender
+        msg['To'] = owner_email
+        msg['Subject'] = subject
+
+        msg.attach(MIMEText(body, 'html'))
+
+        # Configure the SMTP server settings
+        smtp_server = 'smtp.gmail.com'
+        smtp_port = 465  # For SSL connection
+        server = smtplib.SMTP_SSL(smtp_server, smtp_port)
+        server.login(sender, password)
+        server.sendmail(sender, owner_email, msg.as_string())
+        server.quit()
+
+        return True  # Return True when the email is sent successfully
+    except Exception as e:
+        print(f"Error sending email: {e}")
+        return False
 
 def sanitizeEmail(string):
         return string.replace(',','').replace('"','')
@@ -207,7 +217,7 @@ def sanitizeEmail(string):
 def remove_prefix(users):
     cleaned_users = []
     for user in users:
-        login = user.login.replace('NamedUser(login="', '')
+        login = user.login.replace('NamedUser(login="', '').replace('"', '')
         cleaned_users.append(login)
     return cleaned_users
 
