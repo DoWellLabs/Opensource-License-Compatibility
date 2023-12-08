@@ -4,7 +4,7 @@ import pytest
 from app import send_email
 from flask import Flask, request
 import json
-from app import app
+import app as app_module
 import requests_mock
 from app import legalzard_bot
 from unittest.mock import Mock, patch
@@ -18,8 +18,6 @@ def app():
 @patch('app.Github')
 def test_legalzard_bot_with_license(mock_github, mock_requests_get, app):
     client = app.test_client()
-
-<<<<<<< HEAD
     # Simulate a payload with a repository license
     payload = {
         'repository': {
@@ -32,8 +30,6 @@ def test_legalzard_bot_with_license(mock_github, mock_requests_get, app):
 
     }
     
-=======
->>>>>>> ea485a9889251a09249ecd5478cd2ba996473246
     # Mock the response from the GitHub API for user info
     user_info_mock = Mock()
     user_info_mock.json.return_value = {'email': 'test@example.com'}
@@ -54,15 +50,11 @@ def test_legalzard_bot_with_license(mock_github, mock_requests_get, app):
         }
     }
     mock_requests_get.return_value.json.return_value = sbom_data
-
-<<<<<<< HEAD
     # Send a POST request to the / route with JSON data
     response = client.post('/legalzard-bot', json=payload)
 
     # Verify the response
     assert response.status_code == 404
-    
-=======
     # Test with a repository that has a license
     payload = {
         'repository': {
@@ -100,7 +92,6 @@ def test_legalzard_bot_with_license(mock_github, mock_requests_get, app):
     assert response.status_code == 404
     
             
->>>>>>> ea485a9889251a09249ecd5478cd2ba996473246
 
 
 @pytest.fixture
@@ -108,22 +99,16 @@ def smtp_server():
     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
         yield smtp_server
 
-<<<<<<< HEAD
 def test_send_email(smtp_server):
     # create a sample email
-=======
-def test_send_email():
->>>>>>> ea485a9889251a09249ecd5478cd2ba996473246
     subject = 'Test Email'
     body = '<h1>This is a test email</h1>'
     sender = 'marvin.wekesa@gmail.com'
     owner_email = 'isaiahmwinga7@gmail.com'
     password = 'tntccgeyrevydnve'
-<<<<<<< HEAD
     send_email(subject, body, sender, owner_email, password)
     # assert that the email was sent successfully
     assert send_email(subject, body, sender, owner_email, password) == True
-=======
 
     try:
         result = send_email(subject, body, sender, owner_email, password)
@@ -150,4 +135,4 @@ def test_add_prefix():
     names = ['user1', 'user2']
     result = app_module.add_prefix(names)
     assert result == '@user1 @user2'
->>>>>>> ea485a9889251a09249ecd5478cd2ba996473246
+
